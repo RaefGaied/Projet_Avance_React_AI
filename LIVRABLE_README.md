@@ -1,10 +1,5 @@
 # Livrable: MERN Week 9 - React Router & Authentification JWT
 
-**Échéance**: Avant 00:00 aujourd'hui  
-**Matière**: Cours MERN - Semaine 9  
-**Professeurs**: Abdelweheb GUEDDES & Mohamed Ben Jazia / Ecole Polytechnique Sousse
-
----
 
 ## Contenu du Livrable
 
