@@ -30,22 +30,15 @@ exports.getCourseById = async (req, res) => {
 };
 exports.enrollUser = async (req, res) => {
   try {
-    // Récupère userId depuis req.body
     const { userId } = req.body;
-    
-    // Debug: Affiche ce qui est reçu
     console.log('Params reçus:', req.params);
     console.log('Body reçu:', req.body);
     console.log('userId reçu:', userId);
-    
-    // Vérifie que userId est fourni
     if (!userId) {
       return res.status(400).json({ 
         message: 'userId est requis dans le corps de la requête' 
       });
     }
-
-    // Utilise req.params.courseId (comme dans ta route)
     const course = await Course.findById(req.params.courseId);
     const user = await User.findById(userId);
 
@@ -67,11 +60,8 @@ exports.enrollUser = async (req, res) => {
       });
     }
 
-    // Ajoute l'utilisateur au cours
     course.students.push(userId);
     await course.save();
-
-    // Ajoute le cours à l'utilisateur (si le champ courses existe)
     if (user.courses && !user.courses.includes(course._id)) {
       user.courses.push(course._id);
       await user.save();

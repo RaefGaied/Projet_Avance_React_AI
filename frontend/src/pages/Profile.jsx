@@ -14,7 +14,6 @@ function Profile() {
 
   useEffect(() => {
     if (user) {
-      // Récupère les statistiques si nécessaire
       calculateStats();
       setProfileLoading(false);
     }
@@ -22,12 +21,10 @@ function Profile() {
 
   const calculateStats = () => {
     if (!enrolledCourses.length) return;
-    
-    // Simule des données de progression (dans un vrai projet, ça viendrait de l'API)
     const totalCourses = enrolledCourses.length;
-    const completedCourses = Math.floor(totalCourses * 0.3); // 30% complétés pour l'exemple
+    const completedCourses = Math.floor(totalCourses * 0.3); 
     const progress = totalCourses > 0 ? Math.round((completedCourses / totalCourses) * 100) : 0;
-    
+
     setStats({
       totalCourses,
       completedCourses,
@@ -45,16 +42,16 @@ function Profile() {
 
   if (authLoading || profileLoading) {
     return (
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center", 
-        minHeight: "60vh" 
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "60vh"
       }}>
         <div style={{ textAlign: "center" }}>
-          <div style={{ 
-            width: "50px", 
-            height: "50px", 
+          <div style={{
+            width: "50px",
+            height: "50px",
             border: "4px solid #f3f3f3",
             borderTop: "4px solid #667eea",
             borderRadius: "50%",
@@ -75,14 +72,14 @@ function Profile() {
 
   if (!user) {
     return (
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center", 
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         minHeight: "60vh",
         padding: "20px"
       }}>
-        <div style={{ 
+        <div style={{
           textAlign: "center",
           maxWidth: "500px"
         }}>
@@ -146,28 +143,64 @@ function Profile() {
   }
 
   return (
-    <div style={{ 
+    <div style={{
       minHeight: "100vh",
       background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
       padding: "30px 20px"
     }}>
-      <div style={{ 
-        maxWidth: "1200px", 
-        margin: "0 auto" 
+      {/* Bouton Modifier le profil */}
+      <div style={{
+        position: 'fixed',
+        top: '100px',
+        right: '30px',
+        zIndex: 1000
+      }}>
+        <Link
+          to="/profile/edit"
+          style={{
+            display: 'inline-block',
+            padding: '12px 24px',
+            backgroundColor: '#667eea',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '8px',
+            fontWeight: '600',
+            fontSize: '14px',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = '#5a67d8';
+            e.target.style.transform = 'translateY(-2px)';
+            e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = '#667eea';
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+          }}
+        >
+          ✏️ Modifier le profil
+        </Link>
+      </div>
+      
+      <div style={{
+        maxWidth: "1200px",
+        margin: "0 auto"
       }}>
         {/* HEADER DU PROFIL */}
-        <div style={{ 
-          display: "flex", 
-          justifyContent: "space-between", 
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
           alignItems: "flex-start",
           marginBottom: "30px",
           flexWrap: "wrap",
           gap: "20px"
         }}>
           <div>
-            <h1 style={{ 
-              color: "#333", 
-              fontSize: "36px", 
+            <h1 style={{
+              color: "#333",
+              fontSize: "36px",
               fontWeight: "800",
               marginBottom: "10px",
               background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -180,7 +213,7 @@ function Profile() {
               Gérez vos informations et suivez votre progression
             </p>
           </div>
-          
+
           <button
             onClick={handleRefresh}
             style={{
@@ -211,76 +244,111 @@ function Profile() {
           </button>
         </div>
 
-        {/* INFORMATIONS UTILISATEUR */}
-        <div style={{ 
-          display: "grid", 
+        {/* INFORMATIONS UTILISATEUR ET STATISTIQUES */}
+        <div style={{
+          display: "grid",
           gridTemplateColumns: "1fr 2fr",
           gap: "30px",
           marginBottom: "40px"
         }}>
           {/* AVATAR ET INFOS BASIQUES */}
-          <div style={{ 
-            background: "white", 
+          <div style={{
+            background: "white",
             borderRadius: "20px",
             padding: "30px",
             boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
-            textAlign: "center"
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px"
           }}>
-            <div style={{
-              width: "120px",
-              height: "120px",
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "white",
-              fontWeight: "700",
-              fontSize: "48px",
-              margin: "0 auto 20px"
-            }}>
-              {user.username?.charAt(0).toUpperCase() || "U"}
+            <div>
+              <div style={{
+                width: "120px",
+                height: "120px",
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                fontWeight: "700",
+                fontSize: "48px",
+                margin: "0 auto 20px"
+              }}>
+                {user.username?.charAt(0).toUpperCase() || "U"}
+              </div>
+
+              <h2 style={{
+                color: "#333",
+                fontSize: "24px",
+                fontWeight: "700",
+                marginBottom: "5px"
+              }}>
+                {user.username}
+              </h2>
+
+              <p style={{
+                color: "#666",
+                fontSize: "14px",
+                marginBottom: "20px"
+              }}>
+                {user.email}
+              </p>
             </div>
-            
-            <h2 style={{ 
-              color: "#333", 
-              fontSize: "24px", 
-              fontWeight: "700",
-              marginBottom: "5px"
-            }}>
-              {user.username}
-            </h2>
-            
-            <p style={{ 
-              color: "#666", 
-              fontSize: "14px",
-              marginBottom: "20px"
-            }}>
-              {user.email}
-            </p>
-            
-            <div style={{ 
+
+            <div style={{
               padding: "12px",
               background: "#f8f9ff",
               borderRadius: "12px",
               fontSize: "14px",
               color: "#667eea",
-              fontWeight: "600"
+              fontWeight: "600",
             }}>
-              Membre depuis 2024
+              <div style={{ fontSize: "32px", color: "#667eea", marginBottom: "10px" }}>📚</div>
+              <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
+                {stats.totalCourses}
+              </div>
+              <div style={{ fontSize: "14px", color: "#666" }}>Cours inscrits</div>
+            </div>
+
+            <div style={{
+              textAlign: "center",
+              padding: "20px",
+              background: "#fff5f5",
+              borderRadius: "15px"
+            }}>
+              <div style={{ fontSize: "32px", color: "#ff6b6b", marginBottom: "10px" }}>✅</div>
+              <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
+                {stats.completedCourses}
+              </div>
+              <div style={{ fontSize: "14px", color: "#666" }}>Cours terminés</div>
+            </div>
+
+            <div style={{
+              textAlign: "center",
+              padding: "20px",
+              background: "#f5fff8",
+              borderRadius: "15px"
+            }}>
+              <div style={{ fontSize: "32px", color: "#4CAF50", marginBottom: "10px" }}>📈</div>
+              <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
+                {stats.progress}%
+              </div>
+              <div style={{ fontSize: "14px", color: "#666" }}>Progression globale</div>
             </div>
           </div>
 
-          {/* STATISTIQUES */}
-          <div style={{ 
-            background: "white", 
+          {/* MES STATISTIQUES */}
+          <div style={{
+            background: "white",
             borderRadius: "20px",
             padding: "30px",
             boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)"
           }}>
-            <h3 style={{ 
-              color: "#333", 
-              fontSize: "20px", 
+            <h2 style={{
+              color: "#333",
+              fontSize: "24px",
               fontWeight: "700",
               marginBottom: "25px",
               display: "flex",
@@ -289,58 +357,12 @@ function Profile() {
             }}>
               <span>📊</span>
               Mes Statistiques
-            </h3>
-            
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", 
-              gap: "20px",
-              marginBottom: "30px"
-            }}>
-              <div style={{ 
-                textAlign: "center",
-                padding: "20px",
-                background: "#f8f9ff",
-                borderRadius: "15px"
-              }}>
-                <div style={{ fontSize: "32px", color: "#667eea", marginBottom: "10px" }}>📚</div>
-                <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
-                  {stats.totalCourses}
-                </div>
-                <div style={{ fontSize: "14px", color: "#666" }}>Cours inscrits</div>
-              </div>
-              
-              <div style={{ 
-                textAlign: "center",
-                padding: "20px",
-                background: "#fff5f5",
-                borderRadius: "15px"
-              }}>
-                <div style={{ fontSize: "32px", color: "#ff6b6b", marginBottom: "10px" }}>✅</div>
-                <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
-                  {stats.completedCourses}
-                </div>
-                <div style={{ fontSize: "14px", color: "#666" }}>Cours terminés</div>
-              </div>
-              
-              <div style={{ 
-                textAlign: "center",
-                padding: "20px",
-                background: "#f5fff8",
-                borderRadius: "15px"
-              }}>
-                <div style={{ fontSize: "32px", color: "#4CAF50", marginBottom: "10px" }}>📈</div>
-                <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
-                  {stats.progress}%
-                </div>
-                <div style={{ fontSize: "14px", color: "#666" }}>Progression globale</div>
-              </div>
-            </div>
+            </h2>
 
             {/* BARRE DE PROGRESSION */}
-            <div>
-              <div style={{ 
-                display: "flex", 
+            <div style={{ marginBottom: "30px" }}>
+              <div style={{
+                display: "flex",
                 justifyContent: "space-between",
                 marginBottom: "10px"
               }}>
@@ -366,26 +388,59 @@ function Profile() {
                 }} />
               </div>
             </div>
+
+            {/* DÉTAILS DES STATS */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "20px"
+            }}>
+              <div style={{
+                textAlign: "center",
+                padding: "20px",
+                background: "#f8f9ff",
+                borderRadius: "15px"
+              }}>
+                <div style={{ fontSize: "32px", color: "#667eea", marginBottom: "10px" }}>📚</div>
+                <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
+                  {stats.totalCourses}
+                </div>
+                <div style={{ fontSize: "14px", color: "#666" }}>Cours inscrits</div>
+              </div>
+
+              <div style={{
+                textAlign: "center",
+                padding: "20px",
+                background: "#fff5f5",
+                borderRadius: "15px"
+              }}>
+                <div style={{ fontSize: "32px", color: "#ff6b6b", marginBottom: "10px" }}>✅</div>
+                <div style={{ fontSize: "24px", fontWeight: "700", color: "#333" }}>
+                  {stats.completedCourses}
+                </div>
+                <div style={{ fontSize: "14px", color: "#666" }}>Cours terminés</div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* MES COURS */}
-        <div style={{ 
-          background: "white", 
+        <div style={{
+          background: "white",
           borderRadius: "20px",
           padding: "30px",
           boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
           marginBottom: "30px"
         }}>
-          <div style={{ 
-            display: "flex", 
+          <div style={{
+            display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "25px"
           }}>
-            <h2 style={{ 
-              color: "#333", 
-              fontSize: "24px", 
+            <h2 style={{
+              color: "#333",
+              fontSize: "24px",
               fontWeight: "700",
               display: "flex",
               alignItems: "center",
@@ -394,7 +449,7 @@ function Profile() {
               <span>🎓</span>
               Mes Cours ({enrolledCourses.length})
             </h2>
-            
+
             <Link
               to="/courses"
               style={{
@@ -421,20 +476,20 @@ function Profile() {
           </div>
 
           {enrolledCourses.length === 0 ? (
-            <div style={{ 
-              textAlign: "center", 
-              padding: "50px" 
+            <div style={{
+              textAlign: "center",
+              padding: "50px"
             }}>
               <div style={{ fontSize: "60px", marginBottom: "20px" }}>📚</div>
-              <h3 style={{ 
-                color: "#333", 
+              <h3 style={{
+                color: "#333",
                 fontSize: "20px",
                 marginBottom: "10px"
               }}>
                 Aucun cours pour le moment
               </h3>
-              <p style={{ 
-                color: "#666", 
+              <p style={{
+                color: "#666",
                 fontSize: "16px",
                 marginBottom: "30px",
                 maxWidth: "400px",
@@ -467,9 +522,9 @@ function Profile() {
               </Link>
             </div>
           ) : (
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", 
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
               gap: "25px"
             }}>
               {enrolledCourses.map((course) => (
@@ -525,7 +580,7 @@ function Profile() {
                         {course.emoji || "📚"}
                       </div>
                     </div>
-                    
+
                     <div style={{ padding: "20px" }}>
                       <h3 style={{
                         color: "#333",
@@ -536,7 +591,7 @@ function Profile() {
                       }}>
                         {typeof course === 'object' ? course.title : "Chargement..."}
                       </h3>
-                      
+
                       <p style={{
                         color: "#666",
                         fontSize: "14px",
@@ -545,11 +600,11 @@ function Profile() {
                         overflow: "hidden",
                         lineHeight: "1.4"
                       }}>
-                        {typeof course === 'object' ? 
-                          (course.description?.substring(0, 80) + "...") : 
+                        {typeof course === 'object' ?
+                          (course.description?.substring(0, 80) + "...") :
                           "Description du cours"}
                       </p>
-                      
+
                       <div style={{
                         display: "flex",
                         alignItems: "center",
@@ -578,7 +633,7 @@ function Profile() {
                           {typeof course === 'object' ? course.instructor || "Instructeur" : "Instructeur"}
                         </span>
                       </div>
-                      
+
                       <div style={{
                         padding: "10px",
                         background: "#f8f9ff",
@@ -600,15 +655,15 @@ function Profile() {
         </div>
 
         {/* ACTIONS DU PROFIL */}
-        <div style={{ 
-          background: "white", 
+        <div style={{
+          background: "white",
           borderRadius: "20px",
           padding: "30px",
           boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)"
         }}>
-          <h3 style={{ 
-            color: "#333", 
-            fontSize: "20px", 
+          <h3 style={{
+            color: "#333",
+            fontSize: "20px",
             fontWeight: "700",
             marginBottom: "25px",
             display: "flex",
@@ -618,39 +673,44 @@ function Profile() {
             <span>⚙️</span>
             Actions du compte
           </h3>
-          
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", 
-            gap: "15px" 
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "15px"
           }}>
-            <button style={{
-              padding: "15px",
-              background: "#f8f9ff",
-              color: "#667eea",
-              border: "2px solid #667eea",
-              borderRadius: "12px",
-              cursor: "pointer",
-              fontWeight: "600",
-              fontSize: "14px",
-              transition: "all 0.3s ease",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px"
-            }}
-            onMouseOver={(e) => {
-              e.target.style.background = "#667eea";
-              e.target.style.color = "white";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.background = "#f8f9ff";
-              e.target.style.color = "#667eea";
-            }}>
+            <Link
+              to="/profile/edit"
+              style={{
+                padding: "15px",
+                background: "#f8f9ff",
+                color: "#667eea",
+                border: "2px solid #667eea",
+                borderRadius: "12px",
+                cursor: "pointer",
+                fontWeight: "600",
+                fontSize: "14px",
+                transition: "all 0.3s ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                textDecoration: "none",
+                textAlign: "center"
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = "#667eea";
+                e.target.style.color = "white";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = "#f8f9ff";
+                e.target.style.color = "#667eea";
+              }}
+            >
               <span>✏️</span>
               Modifier le profil
-            </button>
-            
+            </Link>
+
             <button style={{
               padding: "15px",
               background: "#fff5f5",
@@ -666,18 +726,18 @@ function Profile() {
               justifyContent: "center",
               gap: "10px"
             }}
-            onMouseOver={(e) => {
-              e.target.style.background = "#ff6b6b";
-              e.target.style.color = "white";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.background = "#fff5f5";
-              e.target.style.color = "#ff6b6b";
-            }}>
+              onMouseOver={(e) => {
+                e.target.style.background = "#ff6b6b";
+                e.target.style.color = "white";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = "#fff5f5";
+                e.target.style.color = "#ff6b6b";
+              }}>
               <span>🔐</span>
               Changer le mot de passe
             </button>
-            
+
             <button style={{
               padding: "15px",
               background: "#fff8e1",
@@ -693,18 +753,18 @@ function Profile() {
               justifyContent: "center",
               gap: "10px"
             }}
-            onMouseOver={(e) => {
-              e.target.style.background = "#FF9800";
-              e.target.style.color = "white";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.background = "#fff8e1";
-              e.target.style.color = "#FF9800";
-            }}>
+              onMouseOver={(e) => {
+                e.target.style.background = "#FF9800";
+                e.target.style.color = "white";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = "#fff8e1";
+                e.target.style.color = "#FF9800";
+              }}>
               <span>📧</span>
               Notifications
             </button>
-            
+
             <button style={{
               padding: "15px",
               background: "#f5f5f5",
@@ -720,16 +780,16 @@ function Profile() {
               justifyContent: "center",
               gap: "10px"
             }}
-            onMouseOver={(e) => {
-              e.target.style.background = "#666";
-              e.target.style.color = "white";
-              e.target.style.borderColor = "#666";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.background = "#f5f5f5";
-              e.target.style.color = "#666";
-              e.target.style.borderColor = "#ddd";
-            }}>
+              onMouseOver={(e) => {
+                e.target.style.background = "#666";
+                e.target.style.color = "white";
+                e.target.style.borderColor = "#666";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = "#f5f5f5";
+                e.target.style.color = "#666";
+                e.target.style.borderColor = "#ddd";
+              }}>
               <span>📥</span>
               Exporter les données
             </button>

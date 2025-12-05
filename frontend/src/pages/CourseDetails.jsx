@@ -8,6 +8,10 @@ function CourseDetails() {
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [submitting, setSubmitting] = useState(false);
   const {
     isAuthenticated,
     user,
@@ -16,13 +20,12 @@ function CourseDetails() {
   } = useAuth();
   const navigate = useNavigate();
 
-  // Vérifie si l'utilisateur est déjà inscrit à ce cours
   const enrolled = isEnrolledInCourse(id);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Charger le cours d'abord
+      
         const courseRes = await api.get(`/courses/${id}`).catch((error) => {
           console.error("Erreur lors du chargement du cours:", error);
           return { data: null };
@@ -30,8 +33,9 @@ function CourseDetails() {
 
         setCourse(courseRes.data);
 
-        // Les reviews sont gérées côté client pour l'instant
-        setReviews([]);
+      
+        const reviewsRes = await api.get(`/reviews/${id}/reviews`);
+        setReviews(reviewsRes.data || []);
 
       } catch (err) {
         console.error("Erreur lors du chargement:", err);
@@ -55,29 +59,62 @@ function CourseDetails() {
     }
 
     try {
-      // Inscription via l'API - utilisez le bon endpoint d'inscription
+      
       const response = await api.post(`/courses/${id}/enroll`, {
         userId: user._id
       });
 
       console.log("Réponse inscription:", response.data);
 
-      // Met à jour le contexte avec le nouveau cours
       if (course) {
-        addEnrolledCourse(course); // Passe l'objet cours complet
+        addEnrolledCourse(course); 
       } else {
-        addEnrolledCourse(id); // Ou juste l'ID si course n'est pas encore chargé
+        addEnrolledCourse(id); 
       }
 
       alert("Inscription réussie !");
-
-      // Recharge les données du cours pour mettre à jour le compteur
       const updatedCourse = await api.get(`/courses/${id}`);
       setCourse(updatedCourse.data);
 
     } catch (err) {
       console.error("Erreur d'inscription:", err);
       alert(err.response?.data?.message || "Erreur lors de l'inscription");
+    }
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!reviewText.trim() || !isAuthenticated || !user?._id) return;
+
+    setSubmitting(true);
+    try {
+      const response = await api.post(`/reviews/${id}/reviews`, {
+        rating: reviewRating,
+        comment: reviewText,
+        userId: user._id
+      });
+
+      console.log('Review submitted successfully:', response.data);
+      setReviews([response.data, ...reviews]);
+      setReviewText("");
+      setReviewRating(5);
+      setShowReviewForm(false);
+    } catch (err) {
+      console.error("Erreur lors de l'envoi de l'avis:", err);
+      console.error('Error details:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        config: {
+          url: err.config?.url,
+          method: err.config?.method,
+          data: err.config?.data
+        }
+      });
+      alert(err.response?.data?.message || "Erreur lors de l'envoi de l'avis");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -203,7 +240,7 @@ function CourseDetails() {
       <h2 style={{ marginTop: "40px" }}>Avis des étudiants</h2>
 
       {reviews.length === 0 ? (
-        <p style={{ color: "#999" }}>Aucun avis pour le moment</p>
+        <p>Aucun avis pour le moment</p>
       ) : (
         reviews.map((review) => (
           <div
@@ -211,7 +248,7 @@ function CourseDetails() {
             style={{
               padding: "15px",
               marginTop: "15px",
-              backgroundColor: "white",
+              backgroundColor: "skyblue",
               borderRadius: "5px",
               border: "1px solid #ddd",
               transition: "all 0.3s ease"
@@ -235,8 +272,93 @@ function CourseDetails() {
           </div>
         ))
       )}
+
+      {enrolled && (
+        <div style={{ marginTop: "30px" }}>
+          <h3>Votre avis</h3>
+          {!showReviewForm ? (
+            <button
+              onClick={() => setShowReviewForm(true)}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#3498db",
+                color: "yhite",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                marginBottom: "20px"
+              }}
+            >
+              Laisser un avis
+            </button>
+          ) : (
+            <form onSubmit={handleSubmitReview} style={{ marginBottom: "30px" }}>
+              <div style={{ marginBottom: "15px" }}>
+                <label style={{ display: "block", marginBottom: "5px" }}>
+                  Note:
+                  <select
+                    value={reviewRating}
+                    onChange={(e) => setReviewRating(Number(e.target.value))}
+                    style={{ marginLeft: "10px", padding: "5px" }}
+                  >
+                    {[5, 4, 3, 2, 1].map(num => (
+                      <option key={num} value={num}>{num} étoiles</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <div style={{ marginBottom: "15px" }}>
+                <textarea
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  placeholder="Partagez votre expérience avec ce cours..."
+                  style={{
+                    width: "100%",
+                    minHeight: "100px",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    border: "1px solid #ddd"
+                  }}
+                  required
+                />
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#27ae60",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    marginRight: "10px"
+                  }}
+                >
+                  {submitting ? "Envoi en cours..." : "Publier l'avis"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowReviewForm(false)}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#e74c3c",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer"
+                  }}
+                >
+                  Annuler
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default CourseDetails;

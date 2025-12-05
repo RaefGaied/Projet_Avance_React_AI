@@ -109,8 +109,8 @@ function MyReviews() {
     try {
       setLoading(true);
       console.log('Fetching reviews for user ID:', user._id);
-      // URL mise à jour pour correspondre à la configuration des routes
-      const response = await api.get(`/api/reviews/user/${user._id}`);
+      // URL sans /api car déjà inclus dans la baseURL d'axios
+      const response = await api.get(`/reviews/user/${user._id}`);
       console.log('Reviews API response:', response.data);
       setReviews(response.data);
       calculateStats(response.data);
@@ -447,7 +447,7 @@ const styles = {
     marginBottom: "50px"
   },
   noReviews: {
-    background: "white",
+    background: "skyblue",
     borderRadius: "12px",
     padding: "40px 20px",
     textAlign: "center",
@@ -475,7 +475,7 @@ const styles = {
     gap: "20px"
   },
   reviewCard: {
-    background: "white",
+    background: "lightyellow",
     borderRadius: "12px",
     padding: "20px",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)"

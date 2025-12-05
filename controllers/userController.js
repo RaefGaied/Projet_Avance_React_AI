@@ -102,23 +102,71 @@ exports.login = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { id } = req.params
-    const { username, email } = req.body
+    const { id } = req.params;
+    const { username, email, bio, website } = req.body;
 
-    const user = await User.findByIdAndUpdate(id, { username, email }, { new: true, runValidators: true })
+    // Vérifier que l'utilisateur met à jour son propre profil ou est un administrateur
+    if (req.userId !== id && req.userRole !== 'admin') {
+      return res.status(403).json({ message: "Non autorisé à mettre à jour ce profil" });
+    }
+
+    // Préparer les champs à mettre à jour
+    const updateFields = {};
+    if (username) updateFields.username = username;
+    if (email) updateFields.email = email;
+    if (bio !== undefined) updateFields.bio = bio;
+    if (website !== undefined) updateFields.website = website;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      updateFields,
+      {
+        new: true,
+        runValidators: true,
+        select: '-password' // Ne pas renvoyer le mot de passe
+      }
+    );
 
     if (!user) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" })
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
 
     res.status(200).json({
-      message: "Utilisateur mis à jour avec succès ✅",
-      user,
-    })
+      message: "Profil mis à jour avec succès ✅",
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        website: user.website,
+        courses: user.courses
+      },
+    });
   } catch (error) {
-    res.status(400).json({ message: "Erreur lors de la mise à jour", error: error.message })
+    console.error('Erreur mise à jour profil:', error);
+
+    // Gestion des erreurs de validation
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({
+        message: "Erreur de validation",
+        errors: messages
+      });
+    }
+
+    // Gestion des erreurs de doublon d'email
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: "Cet email est déjà utilisé par un autre compte"
+      });
+    }
+
+    res.status(500).json({
+      message: "Erreur lors de la mise à jour du profil",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
-}
+};
 
 exports.deleteUser = async (req, res) => {
   try {

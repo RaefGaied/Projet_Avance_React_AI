@@ -19,8 +19,6 @@ function Courses() {
         setLoading(false);
       });
   }, []);
-
-  // Filtrer les cours par recherche
   const filteredCourses = courses.filter(course => {
     return searchTerm === "" || 
       course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

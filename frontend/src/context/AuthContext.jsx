@@ -59,9 +59,7 @@ const AuthProvider = ({ children }) => {
   const decodeToken = (token) => {
     try {
       const decoded = jwtDecode(token);
-      console.log('Decoded token:', decoded); // Ajout d'un log pour déboguer
-
-      // Vérifier si le token contient les informations utilisateur directement
+      console.log('Decoded token:', decoded); 
       if (decoded.user) {
         return {
           _id: decoded.user.id || decoded.user._id,
@@ -71,7 +69,7 @@ const AuthProvider = ({ children }) => {
         };
       }
 
-      // Pour la rétrocompatibilité avec les anciens tokens
+      
       return {
         _id: decoded.id || decoded._id || decoded.userId,
         username: decoded.username || decoded.email?.split('@')[0] || 'Utilisateur',

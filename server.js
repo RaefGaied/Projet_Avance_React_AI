@@ -8,12 +8,14 @@ const profileRoutes = require("./routes/profileRoutes")
 const courseRoutes = require("./routes/courseRoutes")
 const reviewRoutes = require("./routes/reviewRoutes")
 const authRoutes = require("./routes/authRoutes")
+const aiRoutes = require("./routes/aiRoutes")
+
 
 const app = express()
 app.use(express.json())
 
 app.use(cors({
-  origin: "http://localhost:5173", 
+  origin: "http://localhost:5173",
   methods: "GET,POST,PUT,DELETE",
   allowedHeaders: "Content-Type,Authorization"
 }))
@@ -27,6 +29,7 @@ app.use("/api/users", userRoutes)
 app.use("/api/profiles", profileRoutes)
 app.use("/api/courses", courseRoutes)
 app.use("/api/reviews", reviewRoutes)
+app.use("/api/ai", aiRoutes)
 
 app.get("/", (req, res) => {
   res.send("Bienvenue sur la plateforme ")

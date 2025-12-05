@@ -19,7 +19,7 @@ function Navbar() {
         zIndex: "1000",
       }}
     >
-      {/* LEFT SIDE - LOGO & NAVIGATION */}
+    
       <div style={{
         display: "flex",
         alignItems: "center",
@@ -52,7 +52,6 @@ function Navbar() {
           <span style={{ letterSpacing: "-0.5px", whiteSpace: "nowrap" }}>LearnSphere</span>
         </Link>
 
-        {/* NAVIGATION LINKS */}
         <div style={{
           display: "flex",
           gap: "25px",
@@ -141,7 +140,7 @@ function Navbar() {
             }} />
           </Link>
 
-          {/* LIEN "MES AVIS" - SEULEMENT POUR LES UTILISATEURS CONNECTÉS */}
+        
           {isAuthenticated && (
             <Link
               to="/my-reviews"
