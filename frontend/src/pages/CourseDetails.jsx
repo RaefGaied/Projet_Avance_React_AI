@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
 
@@ -80,23 +80,41 @@ function CourseDetails() {
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (!reviewText.trim() || !isAuthenticated || !user?._id) return;
+
+    // Vérification de la longueur du commentaire
+    if (reviewText.trim().length < 10) {
+      alert("Le commentaire doit contenir au moins 10 caractères");
+      return;
+    }
+
+    if (!isAuthenticated || !user?._id) {
+      alert("Vous devez être connecté pour soumettre un avis");
+      return;
+    }
 
     setSubmitting(true);
     try {
-      const response = await api.post(`/reviews/${id}/reviews`, {
+      const reviewData = {
         rating: reviewRating,
         comment: reviewText,
         userId: user._id
-      });
+      };
+
+      console.log("Envoi des données d'avis :", reviewData);
+
+      const response = await api.post(`/reviews/${id}/reviews`, reviewData);
 
       setReviews([response.data, ...reviews]);
       setReviewText("");
       setReviewRating(5);
       setShowReviewForm(false);
     } catch (err) {
-      console.error("Erreur:", err);
-      alert(err.response?.data?.message || "Erreur lors de l'envoi");
+      console.error("Erreur détaillée:", err);
+      const errorMessage = err.response?.data?.message ||
+        (err.response?.data?.errors ?
+          Object.values(err.response.data.errors).map(e => e.message).join('\n') :
+          "Erreur lors de l'envoi de l'avis");
+      alert(errorMessage);
     } finally {
       setSubmitting(false);
     }
@@ -107,25 +125,60 @@ function CourseDetails() {
   };
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '50px 0', fontSize: '18px', color: '#666' }}>Chargement en cours...</div>;
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '60vh',
+        backgroundColor: '#0f172a',
+        color: '#e2e8f0'
+      }}>
+        <div style={{
+          border: '4px solid rgba(255, 255, 255, 0.1)',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          borderTopColor: '#60a5fa',
+          animation: 'spin 1s linear infinite',
+          margin: '0 auto 15px'
+        }}></div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
   }
 
   if (!course) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-        <h2>Cours non trouvé</h2>
-        <p>Le cours demandé n'existe pas ou a été supprimé.</p>
+      <div style={{
+        textAlign: 'center',
+        padding: '40px 20px',
+        backgroundColor: '#0f172a',
+        minHeight: '100vh',
+        color: '#e2e8f0'
+      }}>
+        <h2 style={{ color: '#f8fafc' }}>Cours non trouvé</h2>
+        <p style={{ color: '#94a3b8' }}>Le cours demandé n'existe pas ou a été supprimé.</p>
         <button
           onClick={() => navigate('/courses')}
           style={{
-            padding: '8px 16px',
-            backgroundColor: '#3498db',
+            padding: '10px 20px',
+            backgroundColor: '#3b82f6',
             color: 'white',
             border: 'none',
-            borderRadius: '5px',
+            borderRadius: '6px',
             cursor: 'pointer',
-            marginTop: '15px'
+            marginTop: '15px',
+            fontWeight: '500',
+            transition: 'all 0.2s'
           }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
         >
           Retour aux cours
         </button>
@@ -134,191 +187,312 @@ function CourseDetails() {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ fontSize: '28px', color: '#2c3e50', marginBottom: '15px' }}>{course.title}</h1>
+    <div style={{
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '30px 20px',
+      backgroundColor: '#0f172a',
+      minHeight: '100vh',
+      color: '#e2e8f0'
+    }}>
+      <h1 style={{
+        fontSize: '2rem',
+        color: '#f8fafc',
+        marginBottom: '20px',
+        fontWeight: '600'
+      }}>{course.title}</h1>
 
       <div style={{
-        backgroundColor: '#f8f9fa',
-        padding: '15px',
-        borderRadius: '5px',
-        marginBottom: '20px'
+        backgroundColor: '#1e293b',
+        padding: '25px',
+        borderRadius: '12px',
+        marginBottom: '30px',
+        border: '1px solid #2d3748',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
       }}>
-        <p style={{ fontSize: '16px', color: '#555', lineHeight: '1.6', marginBottom: '20px' }}>{course.description}</p>
-        <p>Créé par: {typeof course.instructor === 'string' ? course.instructor : (course.instructor?.name || 'Instructeur inconnu')}</p>
+        <p style={{
+          fontSize: '1rem',
+          color: '#e2e8f0',
+          lineHeight: '1.7',
+          marginBottom: '20px'
+        }}>{course.description}</p>
+        <p style={{
+          color: '#94a3b8',
+          fontSize: '0.95rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '5px'
+        }}>
+          Créé par: {typeof course.instructor === 'string' ? course.instructor : (course.instructor?.name || 'Instructeur inconnu')}
+        </p>
       </div>
 
       {enrolled ? (
         <div style={{
-          backgroundColor: '#e8f5e9',
-          color: '#2e7d32',
-          padding: '10px 15px',
-          borderRadius: '5px',
-          margin: '15px 0',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
+          backgroundColor: '#1e3a1e',
+          color: '#4ade80',
+          padding: '12px 20px',
+          borderRadius: '8px',
+          margin: '0 0 20px',
+          border: '1px solid #2d7d32',
+          maxWidth: 'fit-content'
         }}>
-          <span>✓</span>
-          <span>Vous êtes inscrit à ce cours</span>
+          <span style={{ fontSize: '1.2rem' }}>✓</span> Vous êtes inscrit à ce cours
         </div>
       ) : (
         <button
           onClick={handleEnroll}
           style={{
-            display: 'block',
-            width: '100%',
-            maxWidth: '300px',
-            padding: '12px',
-            backgroundColor: '#27ae60',
+            padding: '10px 20px',
+            backgroundColor: '#10b981',
             color: 'white',
             border: 'none',
-            borderRadius: '5px',
-            fontSize: '16px',
+            borderRadius: '8px',
             cursor: 'pointer',
-            margin: '20px 0'
+            marginBottom: '20px',
+            fontWeight: '500',
+            transition: 'all 0.2s'
           }}
-          onMouseEnter={(e) => !enrolled && (e.target.style.backgroundColor = '#219653')}
-          onMouseLeave={(e) => !enrolled && (e.target.style.backgroundColor = '#27ae60')}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
         >
           S'inscrire au cours
         </button>
       )}
 
-      <h2 style={{
-        fontSize: '24px',
-        color: '#2c3e50',
-        margin: '30px 0 15px 0',
-        paddingBottom: '10px',
-        borderBottom: '1px solid #eee'
-      }}>
-        Avis des étudiants
-      </h2>
-
-      {isAuthenticated && enrolled && !showReviewForm && (
-        <button
-          onClick={() => setShowReviewForm(true)}
-          style={{
-            padding: '10px 15px',
-            backgroundColor: '#3498db',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            marginBottom: '20px'
-          }}
-        >
-          Laisser un avis
-        </button>
-      )}
-
       {showReviewForm && (
         <form onSubmit={handleSubmitReview} style={{
-          border: '1px solid #e0e0e0',
-          borderRadius: '8px',
-          padding: '20px',
+          backgroundColor: '#1e293b',
+          padding: '25px',
+          borderRadius: '12px',
           marginBottom: '30px',
-          backgroundColor: '#f8f9fa'
+          border: '1px solid #2d3748',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
         }}>
-          <h3 style={{ marginTop: 0, marginBottom: '15px' }}>Votre avis</h3>
+          <h3 style={{
+            margin: '0 0 20px 0',
+            color: '#f8fafc',
+            fontSize: '1.25rem',
+            fontWeight: '500'
+          }}>Votre avis</h3>
 
-          <div style={{ marginBottom: '15px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Note:</label>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '8px',
+              color: '#e2e8f0',
+              fontWeight: '500'
+            }}>Note:</label>
             <select
               value={reviewRating}
               onChange={(e) => setReviewRating(parseInt(e.target.value))}
               style={{
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #ddd',
+                padding: '10px 12px',
+                borderRadius: '6px',
+                border: '1px solid #3e4c5a',
+                backgroundColor: '#1e293b',
+                color: '#e2e8f0',
                 width: '100%',
-                maxWidth: '100px'
+                maxWidth: '150px',
+                cursor: 'pointer',
+                outline: 'none',
+                transition: 'all 0.2s'
               }}
             >
               {[1, 2, 3, 4, 5].map((num) => (
-                <option key={num} value={num}>
-                  {num} étoile{num > 1 ? 's' : ''}
+                <option key={num} value={num} style={{ backgroundColor: '#1e293b' }}>
+                  {num} {num > 1 ? 'étoiles' : 'étoile'} - {'★'.repeat(num) + '☆'.repeat(5 - num)}
                 </option>
               ))}
             </select>
           </div>
 
-          <div style={{ marginBottom: '15px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Commentaire:</label>
+          <div style={{ marginBottom: '25px' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '8px',
+              color: '#e2e8f0',
+              fontWeight: '500'
+            }}>Commentaire:</label>
             <textarea
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               style={{
                 width: '100%',
-                minHeight: '100px',
-                padding: '10px',
-                borderRadius: '4px',
-                border: '1px solid #ddd',
-                resize: 'vertical'
+                minHeight: '120px',
+                padding: '12px',
+                borderRadius: '6px',
+                border: '1px solid #3e4c5a',
+                backgroundColor: '#1e293b',
+                color: '#e2e8f0',
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                fontSize: '0.95rem',
+                lineHeight: '1.5',
+                transition: 'all 0.2s'
               }}
+              placeholder="Partagez votre expérience avec ce cours..."
               required
             />
           </div>
 
-          <div>
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            flexWrap: 'wrap'
+          }}>
             <button
               type="submit"
               disabled={submitting}
               style={{
-                padding: '8px 20px',
-                backgroundColor: '#27ae60',
+                padding: '10px 24px',
+                backgroundColor: '#10b981',
                 color: 'white',
                 border: 'none',
-                borderRadius: '4px',
+                borderRadius: '6px',
                 cursor: 'pointer',
-                marginRight: '10px'
+                fontWeight: '500',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
               }}
+              onMouseEnter={(e) => !submitting && (e.target.style.backgroundColor = '#059669')}
+              onMouseLeave={(e) => !submitting && (e.target.style.backgroundColor = '#10b981')}
+              onMouseDown={(e) => !submitting && (e.target.style.transform = 'scale(0.98)')}
+              onMouseUp={(e) => !submitting && (e.target.style.transform = 'scale(1)')}
             >
-              {submitting ? 'Envoi...' : 'Envoyer'}
+              {submitting ? (
+                <>
+                  <span className="spinner"></span>
+                  <span>Envoi en cours...</span>
+                </>
+              ) : (
+                <>
+
+                  <span>Publier mon avis</span>
+                </>
+              )}
             </button>
 
             <button
               type="button"
               onClick={() => setShowReviewForm(false)}
               style={{
-                padding: '8px 15px',
-                backgroundColor: '#e74c3c',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
+                padding: '10px 20px',
+                backgroundColor: 'transparent',
+                color: '#94a3b8',
+                border: '1px solid #475569',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: '500',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
               }}
+              onMouseEnter={(e) => {
+                e.target.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                e.target.color = '#e2e8f0';
+              }}
+              onMouseLeave={(e) => {
+                e.target.backgroundColor = 'transparent';
+                e.target.color = '#94a3b8';
+              }}
+              onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+              onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
             >
-              Annuler
+              <span>Annuler</span>
             </button>
           </div>
         </form>
       )}
 
-      {reviews.length > 0 ? (
-        <div>
-          {reviews.map((review) => (
-            <div key={review._id} style={{
-              border: '1px solid #e0e0e0',
+      <div style={{ marginTop: '30px' }}>
+        <h2 style={{
+          fontSize: '1.5rem',
+          color: '#f8fafc',
+          marginBottom: '20px',
+          paddingBottom: '12px',
+          borderBottom: '1px solid #2d3748',
+          fontWeight: '600',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <span>📝</span> Avis des étudiants
+        </h2>
+
+        {isAuthenticated && enrolled && !showReviewForm && (
+          <button
+            onClick={() => setShowReviewForm(true)}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              border: 'none',
               borderRadius: '8px',
-              padding: '15px',
-              marginBottom: '15px',
-              backgroundColor: '#fff'
-            }}>
-              <div style={{ color: '#f1c40f', fontSize: '20px', marginBottom: '10px' }}>
-                {renderStars(review.rating)}
+              cursor: 'pointer',
+              marginBottom: '25px',
+              fontWeight: '500',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
+            onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+            onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
+          >
+            <span>✏️</span> Laisser un avis
+          </button>
+        )}
+
+        {reviews.length > 0 ? (
+          <div>
+            {reviews.map((review) => (
+              <div key={review._id} style={{
+                border: '1px solid #2d3748',
+                borderRadius: '12px',
+                padding: '20px',
+                marginBottom: '20px',
+                backgroundColor: '#1e293b',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+              }}>
+                <div style={{ color: '#f1c40f', fontSize: '20px', marginBottom: '10px' }}>
+                  {renderStars(review.rating)}
+                </div>
+                <p style={{ color: '#e2e8f0', lineHeight: '1.5', marginBottom: '10px' }}>{review.comment}</p>
+                <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+                  Par <span style={{ color: '#e2e8f0', fontWeight: '500' }}>
+                    {review.user?.name || review.user?.username || 'Utilisateur anonyme'}
+                  </span> • {new Date(review.createdAt).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </p>
               </div>
-              <p style={{ color: '#333', lineHeight: '1.5', marginBottom: '10px' }}>{review.comment}</p>
-              <p style={{ color: '#7f8c8d', fontSize: '14px' }}>
-                Par {review.user?.name || 'Utilisateur anonyme'} • {new Date(review.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p style={{ color: '#7f8c8d', fontStyle: 'italic' }}>
-          Aucun avis pour le moment. Soyez le premier à donner votre avis !
-        </p>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div style={{
+            backgroundColor: '#1e293b',
+            border: '1px dashed #475569',
+            borderRadius: '12px',
+            padding: '30px 20px',
+            textAlign: 'center',
+            margin: '20px 0'
+          }}>
+            <p style={{ color: '#94a3b8', fontStyle: 'italic', margin: 0 }}>
+              Aucun avis pour le moment. Soyez le premier à donner votre avis !
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

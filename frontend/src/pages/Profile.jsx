@@ -53,26 +53,28 @@ function Profile() {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '60vh',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: '#0f172a',
+        color: '#e2e8f0'
       }}>
         <div>
           <div style={{
-            border: '4px solid rgba(0, 0, 0, 0.1)',
+            border: '4px solid rgba(255, 255, 255, 0.1)',
             width: '40px',
             height: '40px',
             borderRadius: '50%',
-            borderTopColor: '#3498db',
+            borderTopColor: '#60a5fa',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 15px'
           }}></div>
-          <p>Chargement...</p>
+          <p style={{ color: '#94a3b8' }}>Chargement...</p>
         </div>
-        <style>{`
-          @keyframes spin {
+        <style>{
+          `@keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-          }
-        `}</style>
+          }`
+        }</style>
       </div>
     );
   }
@@ -83,74 +85,92 @@ function Profile() {
         maxWidth: '1200px',
         margin: '0 auto',
         padding: '30px 20px',
-        minHeight: 'calc(100vh - 200px)'
+        minHeight: 'calc(100vh - 100px)',
+        backgroundColor: '#0f172a',
+        color: '#e2e8f0'
       }}>
         <div style={{
           textAlign: 'center',
           maxWidth: '800px',
           margin: '0 auto',
-          padding: '40px 20px'
+          padding: '40px 20px',
+          backgroundColor: '#1e293b',
+          borderRadius: '12px',
+          border: '1px solid #2d3748',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
         }}>
           <h2 style={{
             fontSize: '2rem',
-            color: '#2c3e50',
-            marginBottom: '1rem'
+            color: '#f8fafc',
+            marginBottom: '1rem',
+            fontWeight: '600'
           }}>Découvrez nos cours</h2>
           <p style={{
             fontSize: '1.1rem',
-            color: '#555',
-            marginBottom: '2rem'
-          }}>Connectez-vous pour vous inscrire aux cours</p>
+            color: '#94a3b8',
+            marginBottom: '2rem',
+            lineHeight: '1.6'
+          }}>Connectez-vous pour accéder à votre profil et suivre votre progression</p>
 
           <div style={{
             display: 'flex',
             gap: '15px',
             justifyContent: 'center',
-            marginBottom: '3rem'
+            marginBottom: '3rem',
+            flexWrap: 'wrap'
           }}>
             <Link
               to="/login"
               style={{
-                padding: '10px 20px',
-                backgroundColor: '#3498db',
+                padding: '12px 24px',
+                backgroundColor: '#3b82f6',
                 color: 'white',
-                borderRadius: '5px',
+                borderRadius: '8px',
                 textDecoration: 'none',
                 fontWeight: '500',
-                transition: 'background-color 0.2s',
+                transition: 'all 0.2s',
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '1rem'
+                fontSize: '1rem',
+                minWidth: '160px',
+                textAlign: 'center',
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = '#2980b9'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
+              onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+              onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
             >
               Se connecter
             </Link>
             <Link
               to="/register"
               style={{
-                padding: '10px 20px',
+                padding: '12px 24px',
                 backgroundColor: 'transparent',
-                color: '#3498db',
-                border: '1px solid #3498db',
-                borderRadius: '5px',
+                color: '#60a5fa',
+                border: '1px solid #3b82f6',
+                borderRadius: '8px',
                 textDecoration: 'none',
                 fontWeight: '500',
                 transition: 'all 0.2s',
                 cursor: 'pointer',
-                fontSize: '1rem'
+                fontSize: '1rem',
+                minWidth: '160px',
+                textAlign: 'center'
               }}
               onMouseEnter={(e) => {
-                e.target.backgroundColor = '#f8f9fa';
-                e.target.color = '#2980b9';
-                e.target.borderColor = '#2980b9';
+                e.target.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                e.target.color = '#93c5fd';
+                e.target.borderColor = '#60a5fa';
               }}
               onMouseLeave={(e) => {
                 e.target.backgroundColor = 'transparent';
-                e.target.color = '#3498db';
-                e.target.borderColor = '#3498db';
+                e.target.color = '#60a5fa';
+                e.target.borderColor = '#3b82f6';
               }}
+              onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+              onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
             >
               Créer un compte
             </Link>
@@ -159,9 +179,10 @@ function Profile() {
           <div style={{ marginTop: '2rem' }}>
             <h3 style={{
               fontSize: '1.5rem',
-              color: '#2c3e50',
+              color: '#f8fafc',
               marginBottom: '1.5rem',
-              textAlign: 'center'
+              textAlign: 'center',
+              fontWeight: '600'
             }}>Cours disponibles</h3>
 
             <div style={{
@@ -174,58 +195,70 @@ function Profile() {
                 <div
                   key={course._id}
                   style={{
-                    border: '1px solid #e0e0e0',
-                    borderRadius: '8px',
+                    border: '1px solid #2d3748',
+                    borderRadius: '10px',
                     padding: '20px',
-                    backgroundColor: 'white',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
-                    transition: 'transform 0.2s, box-shadow 0.2s'
+                    backgroundColor: '#1e293b',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                    transition: 'all 0.3s ease',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-5px)';
-                    e.currentTarget.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+                    e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+                    e.currentTarget.style.borderColor = '#3b82f6';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
-                    e.currentTarget.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
+                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                    e.currentTarget.style.borderColor = '#2d3748';
                   }}
                 >
                   <h4 style={{
                     fontSize: '1.2rem',
-                    color: '#2c3e50',
-                    margin: '0 0 10px 0'
+                    color: '#f8fafc',
+                    margin: '0 0 10px 0',
+                    fontWeight: '600'
                   }}>{course.title}</h4>
                   <p style={{
-                    color: '#555',
-                    marginBottom: '15px',
+                    color: '#94a3b8',
+                    marginBottom: '20px',
                     fontSize: '0.95rem',
-                    lineHeight: '1.5'
-                  }}>{course.description}</p>
+                    lineHeight: '1.6',
+                    flex: '1'
+                  }}>
+                    {course.description?.substring(0, 150)}{course.description?.length > 150 ? '...' : ''}
+                  </p>
                   <Link
                     to="/login"
                     style={{
                       display: 'inline-block',
-                      padding: '8px 16px',
+                      padding: '10px 16px',
                       backgroundColor: 'transparent',
-                      color: '#3498db',
-                      border: '1px solid #3498db',
-                      borderRadius: '5px',
+                      color: '#60a5fa',
+                      border: '1px solid #3b82f6',
+                      borderRadius: '6px',
                       textDecoration: 'none',
                       fontSize: '0.9rem',
-                      transition: 'all 0.2s'
+                      fontWeight: '500',
+                      transition: 'all 0.2s',
+                      textAlign: 'center',
+                      marginTop: 'auto'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.backgroundColor = '#f8f9fa';
-                      e.target.color = '#2980b9';
-                      e.target.borderColor = '#2980b9';
+                      e.target.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                      e.target.color = '#93c5fd';
+                      e.target.borderColor = '#60a5fa';
                     }}
                     onMouseLeave={(e) => {
                       e.target.backgroundColor = 'transparent';
-                      e.target.color = '#3498db';
-                      e.target.borderColor = '#3498db';
+                      e.target.color = '#60a5fa';
+                      e.target.borderColor = '#3b82f6';
                     }}
                   >
-                    Connectez-vous pour vous inscrire
+                    Se connecter pour s'inscrire
                   </Link>
                 </div>
               ))}
@@ -241,14 +274,18 @@ function Profile() {
       maxWidth: '1200px',
       margin: '0 auto',
       padding: '30px 20px',
-      minHeight: 'calc(100vh - 200px)'
+      minHeight: 'calc(100vh - 100px)',
+      backgroundColor: '#0f172a',
+      color: '#e2e8f0'
     }}>
+      {/* En-tête du profil */}
       <div style={{
-        backgroundColor: 'white',
-        borderRadius: '10px',
-        boxShadow: '0 2px 15px rgba(0,0,0,0.05)',
+        backgroundColor: '#1e293b',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
         padding: '30px',
-        marginBottom: '30px'
+        marginBottom: '30px',
+        border: '1px solid #2d3748'
       }}>
         <div style={{
           display: 'flex',
@@ -261,14 +298,19 @@ function Profile() {
           <div>
             <h1 style={{
               fontSize: '2rem',
-              color: '#2c3e50',
-              margin: '0 0 5px 0'
+              color: '#f8fafc',
+              margin: '0 0 8px 0',
+              fontWeight: '600'
             }}>Mon Profil</h1>
             <p style={{
-              color: '#7f8c8d',
+              color: '#94a3b8',
               margin: 0,
-              fontSize: '1rem'
-            }}>Gérez vos informations et suivez votre progression</p>
+              fontSize: '1rem',
+              maxWidth: '600px',
+              lineHeight: '1.5'
+            }}>
+              Gérez vos informations et suivez votre progression dans les cours
+            </p>
           </div>
           <div style={{
             display: 'flex',
@@ -281,63 +323,47 @@ function Profile() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '8px 15px',
-                backgroundColor: '#f8f9fa',
-                border: '1px solid #e0e0e0',
-                borderRadius: '5px',
+                padding: '10px 18px',
+                backgroundColor: '#334155',
+                color: '#e2e8f0',
+                border: '1px solid #475569',
+                borderRadius: '8px',
                 cursor: 'pointer',
                 fontSize: '0.95rem',
-                transition: 'all 0.2s'
+                fontWeight: '500',
+                transition: 'all 0.2s',
+                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f1f1f1';
+                e.currentTarget.style.backgroundColor = '#3e4c5e';
+                e.currentTarget.style.borderColor = '#64748b';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f8f9fa';
+                e.currentTarget.style.backgroundColor = '#334155';
+                e.currentTarget.style.borderColor = '#475569';
               }}
+              onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.98)'}
+              onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
               <span>🔄</span> Actualiser
             </button>
-            <Link
-              to="/profile/edit"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 15px',
-                backgroundColor: '#3498db',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                textDecoration: 'none',
-                fontSize: '0.95rem',
-                transition: 'background-color 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = '#2980b9';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = '#3498db';
-              }}
-            >
-              ✏️ Modifier
-            </Link>
           </div>
         </div>
 
-        {/* Section principale des informations */}
+        {/* Section principale */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 2fr',
           gap: '30px',
           marginTop: '20px'
         }}>
-          {/* Colonne gauche : Informations utilisateur */}
+          {/* Colonne de gauche - Informations du profil */}
           <div style={{
-            backgroundColor: '#fff',
+            backgroundColor: '#1e293b',
             borderRadius: '10px',
             padding: '25px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+            border: '1px solid #2d3748',
             height: 'fit-content'
           }}>
             <div style={{
@@ -350,25 +376,27 @@ function Profile() {
                 width: '80px',
                 height: '80px',
                 borderRadius: '50%',
-                backgroundColor: '#3498db',
+                backgroundColor: '#3b82f6',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '2rem',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.2)'
               }}>
                 {user.username?.charAt(0).toUpperCase() || 'U'}
               </div>
               <div>
                 <h2 style={{
                   margin: '0 0 5px 0',
-                  color: '#2c3e50',
-                  fontSize: '1.5rem'
+                  color: '#f8fafc',
+                  fontSize: '1.5rem',
+                  fontWeight: '600'
                 }}>{user.username || 'Utilisateur'}</h2>
                 <p style={{
                   margin: 0,
-                  color: '#7f8c8d',
+                  color: '#94a3b8',
                   fontSize: '0.95rem'
                 }}>Étudiant</p>
               </div>
@@ -377,59 +405,68 @@ function Profile() {
             <div style={{ marginBottom: '25px' }}>
               <h3 style={{
                 fontSize: '1.1rem',
-                color: '#2c3e50',
+                color: '#f8fafc',
                 margin: '0 0 15px 0',
                 paddingBottom: '10px',
-                borderBottom: '1px solid #eee'
+                borderBottom: '1px solid #2d3748',
+                fontWeight: '500'
               }}>Informations personnelles</h3>
 
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                padding: '10px 0',
-                borderBottom: '1px solid #f5f5f5'
+                padding: '12px 0',
+                borderBottom: '1px solid #2d3748'
               }}>
                 <span style={{
-                  color: '#7f8c8d',
+                  color: '#94a3b8',
                   fontSize: '0.9rem'
                 }}>Nom d'utilisateur</span>
                 <span style={{
-                  color: '#2c3e50',
-                  fontWeight: '500'
-                }}>{user.username}</span>
+                  color: '#f8fafc',
+                  fontWeight: '500',
+                  textAlign: 'right'
+                }}>{user.username || 'Non défini'}</span>
               </div>
 
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                padding: '10px 0',
-                borderBottom: '1px solid #f5f5f5'
+                padding: '12px 0',
+                borderBottom: '1px solid #2d3748'
               }}>
                 <span style={{
-                  color: '#7f8c8d',
+                  color: '#94a3b8',
                   fontSize: '0.9rem'
                 }}>Email</span>
                 <span style={{
-                  color: '#2c3e50',
-                  fontWeight: '500'
-                }}>{user.email}</span>
+                  color: '#f8fafc',
+                  fontWeight: '500',
+                  textAlign: 'right',
+                  wordBreak: 'break-all',
+                  marginLeft: '10px'
+                }}>{user.email || 'Non défini'}</span>
               </div>
 
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                padding: '10px 0',
-                borderBottom: '1px solid #f5f5f5'
+                padding: '12px 0',
+                borderBottom: '1px solid #2d3748'
               }}>
                 <span style={{
-                  color: '#7f8c8d',
+                  color: '#94a3b8',
                   fontSize: '0.9rem'
                 }}>Membre depuis</span>
                 <span style={{
-                  color: '#2c3e50',
+                  color: '#f8fafc',
                   fontWeight: '500'
                 }}>
-                  {new Date(user.createdAt || Date.now()).toLocaleDateString('fr-FR')}
+                  {new Date(user.createdAt || Date.now()).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
                 </span>
               </div>
             </div>
@@ -438,15 +475,17 @@ function Profile() {
               <div style={{ marginBottom: '25px' }}>
                 <h3 style={{
                   fontSize: '1.1rem',
-                  color: '#2c3e50',
+                  color: '#f8fafc',
                   margin: '0 0 15px 0',
                   paddingBottom: '10px',
-                  borderBottom: '1px solid #eee'
+                  borderBottom: '1px solid #2d3748',
+                  fontWeight: '500'
                 }}>Bio</h3>
                 <p style={{
-                  color: '#555',
+                  color: '#e2e8f0',
                   lineHeight: '1.6',
-                  margin: 0
+                  margin: 0,
+                  fontSize: '0.95rem'
                 }}>{user.bio}</p>
               </div>
             )}
@@ -455,24 +494,26 @@ function Profile() {
               <div style={{ marginBottom: '25px' }}>
                 <h3 style={{
                   fontSize: '1.1rem',
-                  color: '#2c3e50',
+                  color: '#f8fafc',
                   margin: '0 0 15px 0',
                   paddingBottom: '10px',
-                  borderBottom: '1px solid #eee'
+                  borderBottom: '1px solid #2d3748',
+                  fontWeight: '500'
                 }}>Site web</h3>
                 <a
                   href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    color: '#3498db',
+                    color: '#60a5fa',
                     textDecoration: 'none',
                     display: 'inline-block',
                     wordBreak: 'break-all',
-                    transition: 'color 0.2s'
+                    transition: 'color 0.2s',
+                    fontSize: '0.95rem'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#2980b9'}
-                  onMouseLeave={(e) => e.target.style.color = '#3498db'}
+                  onMouseEnter={(e) => e.target.style.color = '#93c5fd'}
+                  onMouseLeave={(e) => e.target.style.color = '#60a5fa'}
                 >
                   {user.website}
                 </a>
@@ -486,213 +527,343 @@ function Profile() {
                   display: 'block',
                   width: '100%',
                   padding: '12px',
-                  backgroundColor: '#3498db',
+                  backgroundColor: '#3b82f6',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '5px',
+                  borderRadius: '8px',
                   textAlign: 'center',
                   textDecoration: 'none',
                   fontSize: '1rem',
                   fontWeight: '500',
-                  transition: 'background-color 0.2s'
+                  transition: 'all 0.2s',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
                 }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#2980b9'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#2563eb';
+                  e.target.style.boxShadow = '0 4px 6px -1px rgba(37, 99, 235, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                }}
+                onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+                onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
               >
                 Modifier le profil
               </Link>
             </div>
           </div>
 
-          {/* Colonne droite : Statistiques et cours */}
+          {/* Colonne de droite - Statistiques et cours */}
           <div>
             {/* Cartes de statistiques */}
             <div style={{
               display: 'flex',
-              justifyContent: 'center',
               gap: '20px',
-              marginBottom: '30px',
-              flexWrap: 'wrap'
+              marginBottom: '30px'
             }}>
               <div style={{
-                backgroundColor: 'white',
+                backgroundColor: '#1e293b',
                 borderRadius: '10px',
                 padding: '20px',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '15px',
+                border: '1px solid #2d3748',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
                 minWidth: '200px',
-                flex: '1 1 200px',
-                maxWidth: '300px'
+                maxWidth: '300px',
+                flex: '1'
               }}>
                 <div style={{
-                  width: '50px',
-                  height: '50px',
-                  borderRadius: '10px',
-                  backgroundColor: '#e3f2fd',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.5rem'
-                }}>📚</div>
-                <div>
-                  <div style={{
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold',
-                    color: '#2c3e50'
-                  }}>{stats.totalCourses || 0}</div>
-                  <div style={{
-                    color: '#7f8c8d',
-                    fontSize: '0.9rem'
-                  }}>Cours suivis</div>
+                  marginBottom: '15px',
+                  color: '#60a5fa'
+                }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" />
+                  </svg>
+                </div>
+                <div style={{
+                  fontSize: '2rem',
+                  fontWeight: '600',
+                  color: '#f8fafc',
+                  marginBottom: '5px',
+                  lineHeight: '1.2'
+                }}>
+                  {stats.totalCourses}
+                </div>
+                <div style={{
+                  color: '#94a3b8',
+                  fontSize: '0.9rem'
+                }}>
+                  Cours suivis
                 </div>
               </div>
             </div>
 
-            <div style={{ marginTop: '20px' }}>
+            {/* Section des cours */}
+            <div style={{
+              backgroundColor: '#1e293b',
+              borderRadius: '10px',
+              padding: '25px',
+              border: '1px solid #2d3748',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+            }}>
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: '20px'
+                marginBottom: '25px',
+                flexWrap: 'wrap',
+                gap: '15px'
               }}>
-                <h3 style={{
+                <h2 style={{
+                  margin: 0,
+                  color: '#f8fafc',
                   fontSize: '1.5rem',
-                  color: '#2c3e50',
-                  margin: 0
-                }}>Mes cours inscrits</h3>
-                <Link
-                  to="/courses"
-                  style={{
-                    color: '#3498db',
-                    textDecoration: 'none',
-                    fontWeight: '500',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    transition: 'color 0.2s'
-                  }}
-                  onMouseEnter={(e) => e.target.style.color = '#2980b9'}
-                  onMouseLeave={(e) => e.target.style.color = '#3498db'}
-                >
-                  Voir tous →
-                </Link>
+                  fontWeight: '600'
+                }}>
+                  Mes cours
+                </h2>
+                <div style={{
+                  display: 'flex',
+                  gap: '10px'
+                }}>
+                  <Link
+                    to="/courses"
+                    style={{
+                      padding: '8px 16px',
+                      backgroundColor: '#3b82f6',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      textDecoration: 'none',
+                      fontSize: '0.9rem',
+                      fontWeight: '500',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = '#2563eb';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = '#3b82f6';
+                    }}
+                    onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+                    onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
+                  >
+                    <span>🔍</span> Parcourir
+                  </Link>
+                </div>
               </div>
 
               {enrolledCourses.length > 0 ? (
                 <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '15px'
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  gap: '20px'
                 }}>
-                  {enrolledCourses.map(course => (
+                  {enrolledCourses.map((course) => (
                     <div
                       key={course._id}
                       style={{
-                        backgroundColor: 'white',
+                        backgroundColor: '#1e293b',
                         borderRadius: '10px',
-                        padding: '20px',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+                        border: '1px solid #2d3748',
+                        overflow: 'hidden',
+                        transition: 'all 0.3s ease',
                         display: 'flex',
-                        alignItems: 'center',
-                        gap: '20px',
-                        transition: 'transform 0.2s, box-shadow 0.2s'
+                        flexDirection: 'column',
+                        height: '100%'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                        e.currentTarget.style.transform = 'translateY(-5px)';
+                        e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1)';
+                        e.currentTarget.style.borderColor = '#3b82f6';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'none';
-                        e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = '#2d3748';
                       }}
                     >
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <h4 style={{
-                          margin: '0 0 8px 0',
-                          color: '#2c3e50',
-                          fontSize: '1.1rem',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}>{course.title}</h4>
-
-                        <p style={{
-                          color: '#666',
-                          fontSize: '0.9rem',
-                          margin: '0 0 12px 0',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}>
-                          {course.description?.substring(0, 80)}{course.description?.length > 80 ? '...' : ''}
-                        </p>
+                      <div style={{
+                        height: '120px',
+                        backgroundColor: '#0f172a',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#334155',
+                        fontSize: '2rem',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}>
+                        {course.image ? (
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              position: 'absolute',
+                              top: 0,
+                              left: 0
+                            }}
+                          />
+                        ) : (
+                          <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#0f172a',
+                            color: '#334155',
+                            fontSize: '2rem'
+                          }}>
+                            {course.title?.charAt(0)?.toUpperCase() || 'C'}
+                          </div>
+                        )}
                       </div>
+                      <div style={{
+                        padding: '20px',
+                        flex: '1',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}>
+                        <div style={{
+                          marginBottom: '15px',
+                          flex: '1'
+                        }}>
+                          <h3 style={{
+                            margin: '0 0 10px 0',
+                            color: '#f8fafc',
+                            fontSize: '1.1rem',
+                            fontWeight: '600',
+                            lineHeight: '1.4'
+                          }}>
+                            {course.title || 'Titre du cours'}
+                          </h3>
+                          <p style={{
+                            color: '#94a3b8',
+                            fontSize: '0.9rem',
+                            margin: '0 0 15px 0',
+                            lineHeight: '1.5',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}>
+                            {course.description || 'Aucune description disponible'}
+                          </p>
+                        </div>
 
-                      <Link
-                        to={`/courses/${course._id}`}
-                        style={{
-                          color: '#3498db',
-                          textDecoration: 'none',
-                          fontWeight: '500',
-                          whiteSpace: 'nowrap',
-                          padding: '8px 15px',
-                          border: '1px solid #3498db',
-                          borderRadius: '5px',
-                          transition: 'all 0.2s',
-                          flexShrink: 0
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.backgroundColor = '#f8f9fa';
-                          e.target.color = '#2980b9';
-                          e.target.borderColor = '#2980b9';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.backgroundColor = 'transparent';
-                          e.target.color = '#3498db';
-                          e.target.borderColor = '#3498db';
-                        }}
-                      >
-                        Continuer →
-                      </Link>
+                        <div style={{
+                          marginTop: 'auto',
+                          paddingTop: '15px',
+                          borderTop: '1px solid #2d3748'
+                        }}>
+                          <Link
+                            to={`/courses/${course._id}`}
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              padding: '10px',
+                              backgroundColor: 'transparent',
+                              color: '#60a5fa',
+                              border: '1px solid #3b82f6',
+                              borderRadius: '6px',
+                              textAlign: 'center',
+                              textDecoration: 'none',
+                              fontSize: '0.9rem',
+                              fontWeight: '500',
+                              transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                              e.target.style.color = '#93c5fd';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = 'transparent';
+                              e.target.style.color = '#60a5fa';
+                            }}
+                          >
+                            Continuer la formation
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div style={{
-                  backgroundColor: 'white',
-                  borderRadius: '10px',
-                  padding: '40px 20px',
                   textAlign: 'center',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
+                  padding: '40px 20px',
+                  backgroundColor: '#1e293b',
+                  borderRadius: '8px',
+                  border: '1px dashed #475569',
+                  marginTop: '20px'
                 }}>
                   <div style={{
-                    fontSize: '3rem',
-                    marginBottom: '15px'
-                  }}>📚</div>
+                    width: '80px',
+                    height: '80px',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 20px',
+                    color: '#3b82f6',
+                    fontSize: '2rem'
+                  }}>
+                    📚
+                  </div>
+                  <h3 style={{
+                    color: '#f8fafc',
+                    margin: '0 0 10px 0',
+                    fontSize: '1.25rem',
+                    fontWeight: '600'
+                  }}>
+                    Aucun cours suivi
+                  </h3>
                   <p style={{
-                    color: '#555',
-                    marginBottom: '20px',
-                    fontSize: '1.1rem'
-                  }}>Vous n'êtes inscrit à aucun cours pour le moment.</p>
+                    color: '#94a3b8',
+                    margin: '0 0 20px 0',
+                    maxWidth: '400px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    lineHeight: '1.5'
+                  }}>
+                    Vous ne suivez aucun cours pour le moment. Parcourez notre catalogue pour trouver des cours intéressants.
+                  </p>
                   <Link
                     to="/courses"
                     style={{
                       display: 'inline-block',
                       padding: '10px 20px',
-                      backgroundColor: '#3498db',
+                      backgroundColor: '#3b82f6',
                       color: 'white',
-                      border: 'none',
-                      borderRadius: '5px',
+                      borderRadius: '6px',
                       textDecoration: 'none',
                       fontWeight: '500',
-                      transition: 'background-color 0.2s'
+                      transition: 'all 0.2s',
+                      border: 'none',
+                      cursor: 'pointer'
                     }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#2980b9'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = '#2563eb';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = '#3b82f6';
+                    }}
+                    onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+                    onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
                   >
                     Parcourir les cours
                   </Link>

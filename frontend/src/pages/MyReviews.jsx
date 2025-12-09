@@ -72,282 +72,441 @@ function MyReviews() {
     }
   };
 
-  const isCourseReviewed = (courseId) => {
-    return reviews.some(review => review.course?._id === courseId);
-  };
-
-  const filteredReviews = [...reviews]; 
+  const filteredReviews = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   if (!isAuthenticated) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px 20px', maxWidth: '600px', margin: '0 auto' }}>
-        <h2>Connectez-vous pour voir vos avis</h2>
-        <p>Vous devez être connecté pour accéder à cette page.</p>
-        <Link to="/login" style={{ display: 'inline-block', padding: '10px 20px', backgroundColor: '#3498db', color: 'white', textDecoration: 'none', borderRadius: '5px', marginTop: '15px' }}>
-          Se connecter
-        </Link>
+      <div style={{
+        maxWidth: '800px',
+        margin: '0 auto',
+        padding: '40px 20px',
+        textAlign: 'center',
+        backgroundColor: '#0f172a',
+        color: '#e2e8f0',
+        minHeight: 'calc(100vh - 80px)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <div style={{
+          backgroundColor: '#1e293b',
+          padding: '40px',
+          borderRadius: '12px',
+          border: '1px solid #2d3748',
+          maxWidth: '600px',
+          width: '100%',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h2 style={{
+            color: '#f8fafc',
+            fontSize: '1.8rem',
+            marginBottom: '15px',
+            fontWeight: '600'
+          }}>Connectez-vous pour voir vos avis</h2>
+          <p style={{
+            color: '#94a3b8',
+            fontSize: '1.1rem',
+            marginBottom: '25px',
+            lineHeight: '1.6'
+          }}>Vous devez être connecté pour accéder à cette page.</p>
+          <Link
+            to="/login"
+            style={{
+              display: 'inline-block',
+              padding: '12px 24px',
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              fontWeight: '500',
+              transition: 'all 0.2s',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#2563eb';
+              e.target.style.boxShadow = '0 4px 6px -1px rgba(37, 99, 235, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#3b82f6';
+              e.target.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+            }}
+            onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+            onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
+          >
+            Se connecter
+          </Link>
+        </div>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: '50px 0', fontSize: '18px', color: '#666' }}>
-        <p>Chargement de vos avis...</p>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '60vh',
+        textAlign: 'center',
+        backgroundColor: '#0f172a',
+        color: '#e2e8f0'
+      }}>
+        <div>
+          <div style={{
+            border: '4px solid rgba(255, 255, 255, 0.1)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            borderTopColor: '#60a5fa',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 15px'
+          }}></div>
+          <p style={{ color: '#94a3b8' }}>Chargement de vos avis...</p>
+        </div>
+        <style>{
+          `@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }`
+        }</style>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-        <h1>Mes Avis</h1>
-        <button
-          onClick={() => fetchUserReviews()}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: '#3498db',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-          onMouseEnter={(e) => e.target.style.backgroundColor = '#2980b9'}
-          onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
-        >
-          🔄 Actualiser
-        </button>
-      </div>
-
-      {/* Compteur d'avis total */}
+    <div style={{
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '30px 20px',
+      minHeight: 'calc(100vh - 100px)',
+      backgroundColor: '#0f172a',
+      color: '#e2e8f0'
+    }}>
       <div style={{
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        padding: '15px 20px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        backgroundColor: '#1e293b',
+        borderRadius: '12px',
+        padding: '30px',
         marginBottom: '30px',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '10px'
+        border: '1px solid #2d3748',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
       }}>
         <div style={{
-          fontSize: '24px',
-          fontWeight: 'bold',
-          color: '#2c3e50'
-        }}>{totalReviews}</div>
-        <div style={{
-          color: '#7f8c8d',
-          fontSize: '16px',
-          whiteSpace: 'nowrap'
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '30px',
+          flexWrap: 'wrap',
+          gap: '15px'
         }}>
-          {totalReviews <= 1 ? 'Avis' : 'Avis au total'}
-        </div>
-      </div>
-
-      {/* Liste des avis */}
-      <div style={{ marginTop: '20px' }}>
-        <h2 style={{
-          fontSize: '20px',
-          color: '#2c3e50',
-          margin: '30px 0 15px 0',
-          paddingBottom: '10px',
-          borderBottom: '1px solid #eee'
-        }}>Mes Avis Récents</h2>
-
-        {filteredReviews.length > 0 ? (
-          filteredReviews.map((review) => (
-            <div key={review._id} style={{
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              padding: '20px',
-              marginBottom: '20px',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '10px',
-                flexWrap: 'wrap',
-                gap: '10px'
-              }}>
-                <h3 style={{
-                  fontSize: '18px',
-                  fontWeight: '600',
-                  color: '#2c3e50',
-                  margin: 0
-                }}>
-                  <Link to={`/courses/${review.course?._id}`} style={{ color: '#3498db', textDecoration: 'none' }}>
-                    {review.course?.title || "Cours supprimé"}
-                  </Link>
-                </h3>
-                <span style={{ color: '#7f8c8d', fontSize: '14px' }}>
-                  {formatDate(review.createdAt)}
-                </span>
-              </div>
-              <div style={{
-                color: '#f1c40f',
-                fontSize: '18px',
-                margin: '10px 0'
-              }}>
-                {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
-                <span style={{ marginLeft: '10px', color: '#7f8c8d', fontSize: '14px' }}>
-                  {getRatingLabel(review.rating)}
-                </span>
-              </div>
-              <p style={{
-                color: '#333',
-                lineHeight: '1.6',
-                marginBottom: '15px'
-              }}>{review.comment}</p>
-              <div style={{
-                display: 'flex',
-                gap: '10px',
-                marginTop: '15px'
-              }}>
-                <button
-                  onClick={() => handleEditReview(review._id)}
-                  style={{
-                    padding: '6px 12px',
-                    backgroundColor: '#3498db',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#2980b9'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
-                >
-                  ✏️ Modifier
-                </button>
-                <button
-                  onClick={() => handleDeleteReview(review._id)}
-                  style={{
-                    padding: '6px 12px',
-                    backgroundColor: '#e74c3c',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#c0392b'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#e74c3c'}
-                >
-                  🗑️ Supprimer
-                </button>
-              </div>
-            </div>
-          ))
-        ) : (
+          <h1 style={{
+            margin: 0,
+            fontSize: '2rem',
+            color: '#f8fafc',
+            fontWeight: '600'
+          }}>Mes Avis</h1>
           <div style={{
-            textAlign: 'center',
-            color: '#7f8c8d',
-            padding: '40px 0',
-            fontSize: '16px'
+            backgroundColor: '#334155',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            fontWeight: '500',
+            fontSize: '0.95rem',
+            color: '#e2e8f0',
+            border: '1px solid #475569'
           }}>
-            <p>Aucun avis ne correspond à votre filtre.</p>
+            {totalReviews} avis
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* Section des cours à noter */}
-      {isAuthenticated && availableCourses.length > 0 && (
-        <div style={{ marginTop: '40px' }}>
+        <div style={{ marginBottom: '40px' }}>
           <h2 style={{
-            fontSize: '20px',
-            color: '#2c3e50',
-            margin: '30px 0 15px 0',
-            paddingBottom: '10px',
-            borderBottom: '1px solid #eee'
-          }}><span>📚</span> Vos cours à noter</h2>
+            margin: '0 0 20px 0',
+            fontSize: '1.5rem',
+            color: '#f8fafc',
+            fontWeight: '500'
+          }}>
+            Historique des avis
+          </h2>
 
-          {availableCourses.filter(course => !isCourseReviewed(course._id)).length > 0 ? (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '20px',
-              marginTop: '20px'
-            }}>
-              {availableCourses
-                .filter(course => !isCourseReviewed(course._id))
-                .map(course => (
-                  <Link
-                    key={course._id}
-                    to={`/courses/${course._id}`}
-                    onClick={(e) => handleLeaveReview(course._id, e)}
-                    style={{
-                      backgroundColor: 'white',
-                      borderRadius: '8px',
-                      padding: '20px',
-                      textDecoration: 'none',
-                      color: 'inherit',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                      transition: 'transform 0.2s'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                    onMouseLeave={(e) => e.currentTarget.style.transform = 'none'}
-                  >
-                    <h3 style={{ margin: '0 0 10px 0', color: '#2c3e50' }}>{course.title}</h3>
-                    <p style={{ color: '#7f8c8d', marginBottom: '15px' }}>
-                      {course.description?.substring(0, 100)}{course.description?.length > 100 ? '...' : ''}
-                    </p>
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginTop: '20px',
-                      paddingTop: '15px',
-                      borderTop: '1px solid #eee'
-                    }}>
-                      <span style={{
-                        color: '#27ae60',
-                        fontWeight: '500',
-                        fontSize: '14px'
+          {filteredReviews.length > 0 ? (
+            <div style={{ display: 'grid', gap: '20px' }}>
+              {filteredReviews.map((review) => (
+                <div
+                  key={review._id}
+                  style={{
+                    border: '1px solid #2d3748',
+                    borderRadius: '10px',
+                    padding: '20px',
+                    backgroundColor: '#1e293b',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.borderColor = '#3b82f6';
+                    e.currentTarget.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.borderColor = '#2d3748';
+                    e.currentTarget.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                  }}
+                >
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '15px',
+                    marginBottom: '15px'
+                  }}>
+                    <div>
+                      <h3 style={{
+                        margin: '0 0 5px 0',
+                        fontSize: '1.2rem',
+                        color: '#f8fafc'
                       }}>
-                        Laisser un avis
-                      </span>
-                      <span style={{
-                        color: '#3498db',
-                        fontSize: '14px'
+                        {review.course?.title || 'Cours supprimé'}
+                      </h3>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        flexWrap: 'wrap'
                       }}>
-                        Voir le cours →
-                      </span>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          backgroundColor: '#334155',
+                          padding: '3px 10px',
+                          borderRadius: '15px',
+                          fontSize: '0.9rem',
+                          border: '1px solid #475569'
+                        }}>
+                          <span style={{ color: '#fbbf24' }}>★</span>
+                          <span>{review.rating}/5</span>
+                          <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+                            ({getRatingLabel(review.rating)})
+                          </span>
+                        </div>
+                        <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+                          Le {formatDate(review.createdAt)}
+                        </span>
+                      </div>
                     </div>
-                  </Link>
-                ))}
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <button
+                        onClick={() => handleEditReview(review._id)}
+                        style={{
+                          padding: '8px 16px',
+                          backgroundColor: '#3b82f6',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          fontSize: '0.9rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = '#2563eb';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = '#3b82f6';
+                        }}
+                        onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+                        onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
+                      >
+                        <span>✏️</span> Modifier
+                      </button>
+                      <button
+                        onClick={() => handleDeleteReview(review._id)}
+                        style={{
+                          padding: '8px 16px',
+                          backgroundColor: 'transparent',
+                          color: '#ef4444',
+                          border: '1px solid #ef4444',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          fontSize: '0.9rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.backgroundColor = 'transparent';
+                        }}
+                        onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+                        onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
+                      >
+                        <span>🗑️</span> Supprimer
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    backgroundColor: '#1e293b',
+                    padding: '15px',
+                    borderRadius: '8px',
+                    marginTop: '15px',
+                    whiteSpace: 'pre-line',
+                    lineHeight: '1.6',
+                    color: '#e2e8f0',
+                    border: '1px solid #2d3748'
+                  }}>
+                    {review.comment}
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <div style={{
               textAlign: 'center',
               padding: '40px 20px',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '8px',
+              backgroundColor: '#1e293b',
+              borderRadius: '10px',
+              border: '1px dashed #475569',
               marginTop: '20px'
             }}>
-              <div style={{ fontSize: '40px', marginBottom: '15px' }}>🎉</div>
-              <h3 style={{ margin: '0 0 10px 0', color: '#2c3e50' }}>Vous avez noté tous vos cours !</h3>
-              <p style={{ color: '#7f8c8d', marginBottom: '20px' }}>Merci d'avoir partagé votre avis sur tous vos cours.</p>
-              <Link
-                to="/courses"
-                style={{
-                  display: 'inline-block',
-                  padding: '10px 20px',
-                  backgroundColor: '#3498db',
-                  color: 'white',
-                  textDecoration: 'none',
-                  borderRadius: '5px',
-                  fontWeight: '500',
-                  transition: 'background-color 0.2s'
-                }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#2980b9'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
-              >
-                Explorer d'autres cours
-              </Link>
+              <div style={{
+                fontSize: '3rem',
+                marginBottom: '15px',
+                color: '#3b82f6'
+              }}>
+                ✍️
+              </div>
+              <h3 style={{
+                color: '#f8fafc',
+                margin: '0 0 10px 0',
+                fontSize: '1.3rem',
+                fontWeight: '500'
+              }}>
+                Aucun avis pour le moment
+              </h3>
+              <p style={{
+                color: '#94a3b8',
+                margin: '0 0 20px 0',
+                maxWidth: '500px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                lineHeight: '1.6'
+              }}>
+                Vous n'avez pas encore laissé d'avis sur les cours que vous suivez.
+              </p>
             </div>
           )}
+        </div>
+      </div>
+
+      {availableCourses.length > 0 && (
+        <div style={{
+          backgroundColor: '#1e293b',
+          borderRadius: '12px',
+          padding: '30px',
+          border: '1px solid #2d3748',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h2 style={{
+            margin: '0 0 20px 0',
+            fontSize: '1.5rem',
+            color: '#f8fafc',
+            fontWeight: '500'
+          }}>
+            Vos cours
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '20px'
+          }}>
+            {availableCourses.map((course) => (
+              <div
+                key={course._id}
+                style={{
+                  border: '1px solid #2d3748',
+                  borderRadius: '10px',
+                  padding: '20px',
+                  backgroundColor: '#1e293b',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.borderColor = '#3b82f6';
+                  e.currentTarget.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.borderColor = '#2d3748';
+                  e.currentTarget.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                }}
+              >
+                <h3 style={{
+                  margin: '0 0 10px 0',
+                  fontSize: '1.1rem',
+                  color: '#f8fafc',
+                  fontWeight: '500'
+                }}>
+                  {course.title}
+                </h3>
+                <p style={{
+                  color: '#94a3b8',
+                  fontSize: '0.95rem',
+                  margin: '0 0 20px 0',
+                  flex: '1',
+                  lineHeight: '1.6'
+                }}>
+                  {course.description?.substring(0, 100)}{course.description?.length > 100 ? '...' : ''}
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+                  <Link
+                    to={`/courses/${course._id}`}
+                    style={{
+                      display: 'inline-block',
+                      padding: '10px 16px',
+                      backgroundColor: '#3b82f6',
+                      color: 'white',
+                      textDecoration: 'none',
+                      borderRadius: '6px',
+                      textAlign: 'center',
+                      fontSize: '0.9rem',
+                      fontWeight: '500',
+                      transition: 'all 0.2s',
+                      alignSelf: 'flex-start',
+                      width: '100%',
+                      boxSizing: 'border-box'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = '#2563eb';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = '#3b82f6';
+                    }}
+                    onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
+                    onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
+                  >
+                    {reviews.some(r => r.course?._id === course._id) ? 'Voir ou modifier mon avis' : 'Ajouter un avis'}
+                  </Link>
+                  {reviews.some(r => r.course?._id === course._id) && (
+                    <div style={{
+                      fontSize: '0.8rem',
+                      color: '#94a3b8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}>
+                      <span>✓</span> Vous pouvez soumettre plusieurs avis pour ce cours
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
