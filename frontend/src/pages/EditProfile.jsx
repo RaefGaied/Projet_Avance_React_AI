@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import api from '../api/axios';
+import { useNavigate } from 'react-router-dom';
+import '../assets/EditProfile.css';
 
 function EditProfile() {
-    const { user, updateUser } = useAuth();
+    const { user, updateUserProfile, refreshUserData } = useAuth();
+    const navigate = useNavigate();
+    
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -16,6 +19,7 @@ function EditProfile() {
 
     useEffect(() => {
         if (user) {
+            console.log("User data loaded in EditProfile:", user);
             setFormData({
                 username: user.username || '',
                 email: user.email || '',
@@ -36,171 +40,126 @@ function EditProfile() {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setSuccess('');
 
         try {
-            const response = await api.put(`/users/${user._id}`, formData);
-            updateUser(response.data);
-            setSuccess('Profil mis à jour avec succès!');
-            setTimeout(() => setSuccess(''), 3000);
+            if (!user?._id) {
+                throw new Error("Utilisateur non identifié");
+            }
+
+            console.log("Updating profile for user:", user._id);
+            console.log("Form data:", formData);
+            
+            // Utiliser la fonction updateUserProfile du contexte
+            const updatedUser = await updateUserProfile(user._id, formData);
+            
+            console.log("Profile updated successfully:", updatedUser);
+            
+            setSuccess('✅ Profil mis à jour avec succès!');
+            
+            // Rafraîchir les données pour s'assurer qu'elles sont synchronisées
+            await refreshUserData();
+            
+            // Rediriger après 2 secondes
+            setTimeout(() => {
+                navigate('/profile');
+            }, 2000);
+            
         } catch (error) {
-            console.error('Erreur lors de la mise à jour du profil:', error);
-            setError(error.response?.data?.message || 'Une erreur est survenue');
+            console.error("Update error:", error);
+            setError(error.response?.data?.message || error.message || 'Une erreur est survenue lors de la mise à jour');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
-            <h1 style={{ marginBottom: '20px' }}>Modifier le profil</h1>
+        <div className="edit-profile-container">
+            <div className="edit-profile-card">
+                <h1>Modifier le profil</h1>
+                
+                {success && (
+                    <div className="success-message">
+                        {success}
+                    </div>
+                )}
 
-            {success && (
-                <div style={{
-                    backgroundColor: '#d4edda',
-                    color: '#155724',
-                    padding: '10px',
-                    borderRadius: '4px',
-                    marginBottom: '20px',
-                    border: '1px solid #c3e6cb'
-                }}>
-                    {success}
-                </div>
-            )}
+                {error && (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                )}
 
-            {error && (
-                <div style={{
-                    backgroundColor: '#f8d7da',
-                    color: '#721c24',
-                    padding: '10px',
-                    borderRadius: '4px',
-                    marginBottom: '20px',
-                    border: '1px solid #f5c6cb'
-                }}>
-                    {error}
-                </div>
-            )}
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label>Nom d'utilisateur:</label>
+                        <input
+                            type="text"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            required
+                            className="form-input"
+                        />
+                    </div>
 
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Nom d'utilisateur:</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        style={{
-                            width: '100%',
-                            padding: '10px',
-                            borderRadius: '4px',
-                            border: '1px solid #ddd',
-                            fontSize: '16px'
-                        }}
-                        required
-                    />
-                </div>
+                    <div className="form-group">
+                        <label>Email:</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className="form-input"
+                        />
+                    </div>
 
-                <div style={{ marginBottom: '15px' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Email:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        style={{
-                            width: '100%',
-                            padding: '10px',
-                            borderRadius: '4px',
-                            border: '1px solid #ddd',
-                            fontSize: '16px'
-                        }}
-                        required
-                    />
-                </div>
+                    <div className="form-group">
+                        <label>Bio:</label>
+                        <textarea
+                            name="bio"
+                            value={formData.bio}
+                            onChange={handleChange}
+                            className="form-textarea"
+                            placeholder="Dites-nous en plus sur vous..."
+                        />
+                    </div>
 
-                <div style={{ marginBottom: '15px' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Bio:</label>
-                    <textarea
-                        name="bio"
-                        value={formData.bio}
-                        onChange={handleChange}
-                        style={{
-                            width: '100%',
-                            padding: '10px',
-                            minHeight: '100px',
-                            borderRadius: '4px',
-                            border: '1px solid #ddd',
-                            fontSize: '16px',
-                            fontFamily: 'inherit',
-                            resize: 'vertical'
-                        }}
-                        placeholder="Dites-nous en plus sur vous..."
-                    />
-                </div>
+                    <div className="form-group">
+                        <label>Site web:</label>
+                        <input
+                            type="url"
+                            name="website"
+                            value={formData.website}
+                            onChange={handleChange}
+                            className="form-input"
+                            placeholder="https://example.com"
+                        />
+                        <small className="form-help">
+                            Laissez ce champ vide si vous ne souhaitez pas afficher de site web.
+                        </small>
+                    </div>
 
-                <div style={{ marginBottom: '25px' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Site web:</label>
-                    <input
-                        type="url"
-                        name="website"
-                        value={formData.website}
-                        onChange={handleChange}
-                        style={{
-                            width: '100%',
-                            padding: '10px',
-                            borderRadius: '4px',
-                            border: '1px solid #ddd',
-                            fontSize: '16px'
-                        }}
-                        placeholder="https://example.com"
-                    />
-                    <small style={{ color: '#6c757d', fontSize: '0.875em' }}>
-                        Laissez ce champ vide si vous ne souhaitez pas afficher de site web.
-                    </small>
-                </div>
+                    <div className="form-actions">
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="btn btn-primary"
+                        >
+                            {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                        </button>
 
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        style={{
-                            padding: '12px 24px',
-                            backgroundColor: '#4CAF50',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            opacity: loading ? 0.7 : 1,
-                            transition: 'all 0.3s ease'
-                        }}
-                        onMouseOver={e => !loading && (e.target.style.opacity = '0.9')}
-                        onMouseOut={e => !loading && (e.target.style.opacity = '1')}
-                    >
-                        {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => window.history.back()}
-                        style={{
-                            padding: '12px 24px',
-                            backgroundColor: '#f8f9fa',
-                            color: '#333',
-                            border: '1px solid #ddd',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            transition: 'all 0.3s ease'
-                        }}
-                        onMouseOver={e => e.target.style.backgroundColor = '#e2e6ea'}
-                        onMouseOut={e => e.target.style.backgroundColor = '#f8f9fa'}
-                    >
-                        Annuler
-                    </button>
-                </div>
-            </form>
+                        <button
+                            type="button"
+                            onClick={() => navigate('/profile')}
+                            className="btn btn-outline"
+                        >
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

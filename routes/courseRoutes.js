@@ -9,13 +9,14 @@ const {
 } = require('../controllers/courseController');
 const { protect } = require('../middleware/authMiddleware');
 
-// Toutes les routes de cours sont protégées
-router.use(protect);
+// Routes publiques (sans authentification requise)
+router.get('/', getCourses);  // Liste des cours
+router.get('/:id', getCourseById);  // Détails d'un cours
 
+// Routes protégées (authentification requise)
+router.use(protect);  // Toutes les routes suivantes nécessitent une authentification
 router.post('/', createCourse);
-router.get('/', getCourses);
-router.get('/:id', getCourseById);
-router.post('/:courseId/enroll', protect,enrollUser);
+router.post('/:courseId/enroll', enrollUser);
 router.get('/:courseId/students', getCourseStudents);
 
 module.exports = router;

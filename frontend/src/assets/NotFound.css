@@ -1,0 +1,219 @@
+/* Variables pour le thème sombre */
+:root {
+    --bg-color: #1a1a2e;
+    --card-bg: #16213e;
+    --text-color: #e6e6e6;
+    --primary-color: #4f46e5;
+    --secondary-color: #6c63ff;
+    --error-color: #ff6b6b;
+    --border-color: #2a2a3c;
+    --shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.not-found-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 2rem;
+}
+
+.not-found-content {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.not-found-illustration {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.not-found-404 {
+    font-size: 12rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.not-found-astronaut {
+    font-size: 5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) rotate(-20deg) translateY(0);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotate(-15deg) translateY(-20px);
+    }
+}
+
+.not-found-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.not-found-message {
+    font-size: 1.25rem;
+    color: #a1a1aa;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.not-found-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.not-found-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 1rem;
+}
+
+.back-button {
+    background-color: #374151;
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #4b5563;
+    transform: translateY(-2px);
+}
+
+.home-button {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+.button-icon {
+    font-size: 1rem;
+}
+
+.not-found-tips {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.not-found-tips p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.not-found-tips ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.not-found-tips li {
+    margin-bottom: 0.5rem;
+    color: #a1a1aa;
+    line-height: 1.5;
+}
+
+.not-found-error-code {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .not-found-404 {
+        font-size: 8rem;
+    }
+
+    .not-found-astronaut {
+        font-size: 4rem;
+    }
+
+    .not-found-title {
+        font-size: 2rem;
+    }
+
+    .not-found-message {
+        font-size: 1.1rem;
+    }
+
+    .not-found-actions {
+        flex-direction: column;
+    }
+
+    .not-found-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .not-found-404 {
+        font-size: 6rem;
+    }
+
+    .not-found-astronaut {
+        font-size: 3rem;
+    }
+
+    .not-found-title {
+        font-size: 1.75rem;
+    }
+
+    .not-found-message {
+        font-size: 1rem;
+    }
+
+    .not-found-tips {
+        padding: 1rem;
+    }
+}

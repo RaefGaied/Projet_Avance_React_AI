@@ -36,6 +36,38 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // NOUVELLE FONCTION : Récupérer les données complètes de l'utilisateur depuis le serveur
+  const fetchUserProfile = async (userId) => {
+    if (!userId) return null;
+    
+    try {
+      console.log("Fetching complete user profile from server...");
+      const response = await api.get(`/users/${userId}`);
+      console.log("Complete user profile:", response.data);
+      
+      // Mettre à jour l'état avec les données complètes
+      setUser(prevUser => {
+        const updatedUser = {
+          ...prevUser,
+          ...response.data,
+          // S'assurer que les champs essentiels sont présents
+          _id: response.data._id || userId,
+          username: response.data.username || prevUser?.username,
+          email: response.data.email || prevUser?.email,
+          bio: response.data.bio || prevUser?.bio,
+          website: response.data.website || prevUser?.website
+        };
+        console.log("Updated user state:", updatedUser);
+        return updatedUser;
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      return null;
+    }
+  };
+
   const addEnrolledCourse = (course) => {
     console.log("Adding enrolled course:", course);
     setEnrolledCourses(prev => {
@@ -59,7 +91,7 @@ const AuthProvider = ({ children }) => {
   const decodeToken = (token) => {
     try {
       const decoded = jwtDecode(token);
-      console.log('Decoded token:', decoded); 
+      console.log('Decoded token:', decoded);
       if (decoded.user) {
         return {
           _id: decoded.user.id || decoded.user._id,
@@ -69,7 +101,6 @@ const AuthProvider = ({ children }) => {
         };
       }
 
-      
       return {
         _id: decoded.id || decoded._id || decoded.userId,
         username: decoded.username || decoded.email?.split('@')[0] || 'Utilisateur',
@@ -93,6 +124,8 @@ const AuthProvider = ({ children }) => {
           setUser(userData);
 
           if (userData._id) {
+            // Récupérer les données complètes depuis le serveur
+            fetchUserProfile(userData._id);
             fetchUserCourses(userData._id);
           }
         } else {
@@ -111,24 +144,28 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const register = async (userData) => {
+  const register = async (username, email, password) => {
     try {
-      const response = await api.post("/auth/register", userData);
-      const { token } = response.data;
+      const response = await api.post("/auth/register", {
+        username,
+        email,
+        password
+      });
+
+      const { token, user } = response.data;
 
       if (token) {
         localStorage.setItem("token", token);
-
-        const userData = decodeToken(token);
-        if (userData) {
-          setUser(userData);
-        }
+        setUser(user);
       }
 
-      return response.data;
+      return user;
     } catch (error) {
       console.error("Registration error:", error);
-      throw error;
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+      throw new Error("Une erreur est survenue lors de l'inscription");
     }
   };
 
@@ -148,6 +185,8 @@ const AuthProvider = ({ children }) => {
         setUser(userData);
 
         if (userData._id) {
+          // Récupérer les données complètes depuis le serveur
+          await fetchUserProfile(userData._id);
           await fetchUserCourses(userData._id);
         }
       } else {
@@ -166,6 +205,74 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // VERSION CORRIGÉE : Mise à jour FORCÉE des champs
+  const updateUser = (userData) => {
+    console.log("updateUser called with:", userData);
+    
+    setUser(prevUser => {
+      if (!prevUser) return userData;
+      
+      const updatedUser = {
+        ...prevUser,
+        ...userData,
+        // Forcer la mise à jour des champs spécifiques
+        username: userData.username !== undefined ? userData.username : prevUser.username,
+        email: userData.email !== undefined ? userData.email : prevUser.email,
+        bio: userData.bio !== undefined ? userData.bio : prevUser.bio,
+        website: userData.website !== undefined ? userData.website : prevUser.website,
+        // Toujours conserver l'ID
+        _id: prevUser._id
+      };
+      
+      console.log("Updated user in context:", updatedUser);
+      return updatedUser;
+    });
+  };
+
+  // NOUVELLE FONCTION : Mettre à jour le profil sur le serveur
+  const updateUserProfile = async (userId, userData) => {
+    try {
+      console.log("Updating user profile on server:", userId, userData);
+      
+      const response = await api.put(`/users/${userId}`, userData);
+      const updatedUser = response.data.user || response.data;
+      
+      console.log("Server response:", updatedUser);
+      
+      // Mettre à jour l'état local avec la réponse du serveur
+      updateUser({
+        ...updatedUser,
+        _id: userId // Garder le même ID
+      });
+      
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
+    }
+  };
+
+  // NOUVELLE FONCTION : Rafraîchir les données utilisateur depuis le serveur
+  const refreshUserData = async () => {
+    if (user?._id) {
+      try {
+        console.log("Refreshing user data from server...");
+        const response = await api.get(`/users/${user._id}`);
+        const freshData = response.data;
+        
+        console.log("Fresh user data from server:", freshData);
+        
+        // Mettre à jour l'état avec les données fraîches
+        updateUser(freshData);
+        
+        return freshData;
+      } catch (error) {
+        console.error("Error refreshing user data:", error);
+        throw error;
+      }
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -175,9 +282,13 @@ const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        updateUser,
+        updateUserProfile, // Ajouté
+        refreshUserData, // Ajouté
+        fetchUserProfile, // Ajouté
         isAuthenticated: !!user,
-        addEnrolledCourse,
         isEnrolledInCourse,
+        addEnrolledCourse,
         refreshCourses: () => user?._id && fetchUserCourses(user._id)
       }}
     >

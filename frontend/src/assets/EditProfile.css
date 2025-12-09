@@ -1,0 +1,141 @@
+/* EditProfile.css - Styles pour le thème sombre */
+
+.edit-profile-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.edit-profile-card {
+    background: var(--bg-lighter);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+.edit-profile-card h1 {
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-medium);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(138, 99, 255, 0.1);
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    min-height: 120px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(138, 99, 255, 0.1);
+}
+
+.form-help {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-light);
+    font-size: 0.875em;
+}
+
+.error-message {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--danger-color);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--danger-color);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.success-message {
+    background: rgba(102, 187, 106, 0.1);
+    color: var(--success-color);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--success-color);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background: rgba(138, 99, 255, 0.1);
+}

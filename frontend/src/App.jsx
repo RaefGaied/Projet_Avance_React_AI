@@ -8,30 +8,53 @@ import Register from "./pages/Register";
 import Courses from "./pages/Courses";
 import CourseDetails from "./pages/CourseDetails";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 import MyReviews from "./pages/MyReviews";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
-    <div>
+    <div className="app">
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/courses/:id" element={<CourseDetails />} />
-        <Route path="/my-reviews" element={<MyReviews />} />
+      <main className="page-wrapper">
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:id" element={<CourseDetails />} />
+            <Route path="/my-reviews" element={<MyReviews />} />
 
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Route 404 - Doit être la dernière route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </main>
+
+      <footer className="app-footer">
+        <div className="container">
+          <p> {new Date().getFullYear()} Plateforme de Cours en Ligne. Tous droits réservés.</p>
+        </div>
+      </footer>
     </div>
   );
 }
