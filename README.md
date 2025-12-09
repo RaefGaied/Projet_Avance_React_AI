@@ -1,6 +1,6 @@
 # EduPlatform - Plateforme d'Apprentissage en Ligne
 
-## 🚀 Fonctionnalités Principales
+## Fonctionnalités Principales
 
 ### Authentification
 - Inscription et connexion utilisateur
@@ -12,17 +12,17 @@
 - Inscription aux cours
 - Système d'avis et de notation
 
-### 🤖 Intelligence Artificielle
+### Intelligence Artificielle
 - Analyse intelligente des avis
 - Génération automatique de descriptions
 - Recommandations de cours personnalisées
 - Création de profils professionnels
 
-## 📦 Installation
+## Installation
 
 1. Cloner le dépôt :
 ```bash
-git clone https://github.com/votre-utilisateur/Projet-avance-React-AI.git
+git clone https://github.com/RaefGaied/Projet-avance-React-AI.git
 cd Projet-avance-React-AI
 ```
 
@@ -47,17 +47,14 @@ node server.js
 
 L'application sera disponible sur : http://localhost:5000
 
-## 📚 Documentation
+## Documentation
 
 Pour plus de détails sur l'intégration IA, consultez [README_AI.md](README_AI.md)
 
-## 🔧 Technologies Utilisées
+## Technologies Utilisées
 
-- **Frontend** : React, Redux, Material-UI
+- **Frontend** : React, Context, Material-UI
 - **Backend** : Node.js, Express, MongoDB
 - **IA** : Google Gemini API
 - **Authentification** : JWT
 
-## 📝 Licence
-
-MIT License - Voir le fichier [LICENSE](LICENSE) pour plus de détails

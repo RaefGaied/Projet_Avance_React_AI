@@ -1,6 +1,6 @@
 # Intégration d'Intelligence Artificielle avec Gemini
 
-## 📱 Démonstration
+## Démonstration
 
 ### 1. Analyse des Avis
 ![Analyse des Avis](./screenshots/test_api_ai_analyse_reviews.png)

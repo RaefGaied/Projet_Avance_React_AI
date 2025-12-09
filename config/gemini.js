@@ -18,10 +18,10 @@ const getModel = () => {
                 maxOutputTokens: 4096,
             },
         });
-        console.log("\n🎉 Connexion au modèle établie avec succès ! ✅");
+        console.log("\nConnexion au modèle établie avec succès ! ✅");
         return model;
     } catch (error) {
-        console.error("❌ Erreur lors de l'initialisation du modèle Gemini :", error.message);
+        console.error("Erreur lors de l'initialisation du modèle Gemini :", error.message);
         throw error;
     }
 };

@@ -1,6 +1,6 @@
 # Guide Pratique - Intégration IA
 
-## 🛠 Configuration Initiale
+## Configuration Initiale
 
 1. **Obtenir une clé API Gemini**
    - Allez sur [Google AI Studio](https://ai.google.dev/)
@@ -21,7 +21,7 @@
    JWT_SECRET=votre_secret_jwt
    ```
 
-## 🔄 Démarrage Rapide
+## Démarrage Rapide
 
 1. **Démarrer le serveur**
    ```bash
@@ -50,7 +50,7 @@
      -d '{"title": "Introduction à l\'IA", "instructor": "Dr. Smith"}'
    ```
 
-## 🧪 Tests
+## Tests
 
 1. **Tester avec Postman**
    - Importez la collection Postman fournie
@@ -66,7 +66,7 @@
    npm run test:coverage
    ```
 
-## 🚀 Déploiement
+## Déploiement
 
 1. **Préparation pour la production**
    ```bash
@@ -91,7 +91,7 @@
    pm2 startup
    ```
 
-## 🔍 Dépannage
+##  Dépannage
 
 ### Erreurs Courantes
 
@@ -117,6 +117,4 @@
    }));
    ```
 
-## 📞 Support
 
-Pour toute question ou problème, ouvrez une issue sur [GitHub](https://github.com/votre-utilisateur/edupplatform/issues) ou contactez l'équipe de développement.
