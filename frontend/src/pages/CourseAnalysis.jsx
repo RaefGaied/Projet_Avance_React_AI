@@ -11,7 +11,6 @@ function CourseAnalysis() {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        // Charger les infos du cours
         const fetchCourse = async () => {
             try {
                 const response = await api.get(`/courses/${id}`);
@@ -40,7 +39,6 @@ function CourseAnalysis() {
         }
     };
 
-    // Fonction pour formater le texte Markdown en HTML basique
     const formatAnalysis = (text) => {
         if (!text) return null;
 

@@ -13,10 +13,8 @@ const aiRoutes = require("./routes/aiRoutes")
 
 const app = express()
 
-// Parse JSON bodies
 app.use(express.json())
 
-// Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }))
 
 // CORS configuration
@@ -26,7 +24,7 @@ app.use(cors({
   allowedHeaders: "Content-Type,Authorization"
 }))
 
-// CONNECTION BDD
+
 connectDB()
 
 // ROUTES API

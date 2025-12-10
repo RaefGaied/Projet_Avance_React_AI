@@ -17,7 +17,6 @@ function Courses() {
       .get('/courses')
       .then((res) => {
         console.log('Données des cours reçues:', res.data);
-        // Afficher la structure complète du premier cours pour débogage
         if (res.data && res.data.length > 0) {
           console.log('Structure du premier cours:', JSON.stringify(res.data[0], null, 2));
         }
@@ -41,7 +40,6 @@ function Courses() {
       course.description.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Calcul des cours à afficher
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);

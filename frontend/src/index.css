@@ -1,6 +1,6 @@
 /* Variables globales */
 :root {
-  /* Couleurs */
+ 
   --primary-color: #4f46e5;
   --secondary-color: #6c63ff;
   --background-dark: #0f172a;
@@ -14,24 +14,22 @@
   --warning: #f59e0b;
   --border-color: #2d3748;
 
-  /* Tailles */
+
   --header-height: 70px;
   --container-padding: 2rem;
   --border-radius: 12px;
   --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
-  /* Transitions */
+
   --transition: all 0.3s ease;
 }
 
-/* Réinitialisation des styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Styles de base */
 html,
 body {
   height: 100%;
