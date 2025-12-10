@@ -1,7 +1,6 @@
 const Review = require('../models/Review');
 const Course = require('../models/Course');
 
-// 1. Ajouter un avis à un cours
 exports.addReview = async (req, res) => {
   try {
     const { rating, comment, userId } = req.body;
@@ -43,7 +42,7 @@ exports.getCourseReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ course: req.params.courseId })
       .populate('user', 'username email')
-      .sort({ createdAt: -1 }); // Trier du plus récent au plus ancien
+      .sort({ createdAt: -1 }); 
 
     res.json(reviews);
   } catch (error) {

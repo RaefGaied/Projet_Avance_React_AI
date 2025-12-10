@@ -2,9 +2,6 @@ const { getModel } = require('../config/gemini');
 const Course = require('../models/Course');
 const Review = require('../models/Review');
 
-// @desc    Générer un rapport d'analyse des reviews d'un cours
-// @route   POST /api/ai/analyze-reviews/:courseId
-// @access  Private
 exports.analyzeReviews = async (req, res) => {
     try {
         const { courseId } = req.params;
@@ -84,9 +81,6 @@ Génère un rapport structuré au format suivant :
     }
 };
 
-// @desc    Générer une description de cours
-// @route   POST /api/ai/generate-description
-// @access  Private
 exports.generateCourseDescription = async (req, res) => {
     try {
         const { title, instructor, keywords } = req.body;
@@ -131,9 +125,7 @@ Retourne uniquement la description sans titre.`;
     }
 };
 
-// @desc    Suggérer des cours similaires
-// @route   GET /api/ai/similar-courses/:courseId
-// @access  Public
+
 exports.suggestSimilarCourses = async (req, res) => {
     try {
         const { courseId } = req.params;
@@ -201,9 +193,6 @@ Format de réponse :
     }
 };
 
-// @desc    Générer une biographie professionnelle
-// @route   POST /api/ai/generate-bio
-// @access  Private
 exports.generateBio = async (req, res) => {
     try {
         const { interests, experience, goals } = req.body;
@@ -240,9 +229,7 @@ La biographie doit être écrite à la première personne et donner envie de se 
     }
 };
 
-// @desc    Obtenir des insights sur la plateforme
-// @route   GET /api/ai/platform-insights
-// @access  Private (Admin)
+
 exports.getPlatformInsights = async (req, res) => {
     try {
         // Récupérer tous les cours avec leurs reviews
@@ -268,7 +255,7 @@ exports.getPlatformInsights = async (req, res) => {
             reviewsByCourse[courseTitle].push(review.comment);
         });
 
-        // Créer un résumé pour Gemini
+        
         const courseSummaries = Object.entries(reviewsByCourse)
             .map(([title, comments]) =>
                 `${title} : ${comments.length} avis`

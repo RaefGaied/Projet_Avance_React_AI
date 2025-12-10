@@ -10,7 +10,6 @@ function NotFound() {
             <div className="not-found-content">
                 <div className="not-found-illustration">
                     <div className="not-found-404">404</div>
-                    <div className="not-found-astronaut">🚀</div>
                 </div>
 
                 <h1 className="not-found-title">Oups ! Page introuvable</h1>

@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // NOUVELLE FONCTION : Récupérer les données complètes de l'utilisateur depuis le serveur
+  
   const fetchUserProfile = async (userId) => {
     if (!userId) return null;
     
@@ -45,12 +45,12 @@ const AuthProvider = ({ children }) => {
       const response = await api.get(`/users/${userId}`);
       console.log("Complete user profile:", response.data);
       
-      // Mettre à jour l'état avec les données complètes
+     
       setUser(prevUser => {
         const updatedUser = {
           ...prevUser,
           ...response.data,
-          // S'assurer que les champs essentiels sont présents
+          
           _id: response.data._id || userId,
           username: response.data.username || prevUser?.username,
           email: response.data.email || prevUser?.email,
@@ -229,7 +229,7 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  // NOUVELLE FONCTION : Mettre à jour le profil sur le serveur
+  
   const updateUserProfile = async (userId, userData) => {
     try {
       console.log("Updating user profile on server:", userId, userData);
@@ -252,7 +252,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // NOUVELLE FONCTION : Rafraîchir les données utilisateur depuis le serveur
+ 
   const refreshUserData = async () => {
     if (user?._id) {
       try {
@@ -283,9 +283,9 @@ const AuthProvider = ({ children }) => {
         login,
         logout,
         updateUser,
-        updateUserProfile, // Ajouté
-        refreshUserData, // Ajouté
-        fetchUserProfile, // Ajouté
+        updateUserProfile, 
+        refreshUserData, 
+        fetchUserProfile, 
         isAuthenticated: !!user,
         isEnrolledInCourse,
         addEnrolledCourse,

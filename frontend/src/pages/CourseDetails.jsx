@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
+import SimilarCourses from '../components/SimilarCourses';
 
 function CourseDetails() {
   const { id } = useParams();
@@ -227,38 +228,59 @@ function CourseDetails() {
         </p>
       </div>
 
-      {enrolled ? (
-        <div style={{
-          backgroundColor: '#1e3a1e',
-          color: '#4ade80',
-          padding: '12px 20px',
-          borderRadius: '8px',
-          margin: '0 0 20px',
-          border: '1px solid #2d7d32',
-          maxWidth: 'fit-content'
-        }}>
-          <span style={{ fontSize: '1.2rem' }}>✓</span> Vous êtes inscrit à ce cours
-        </div>
-      ) : (
-        <button
-          onClick={handleEnroll}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#10b981',
-            color: 'white',
-            border: 'none',
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap' }}>
+        {enrolled ? (
+          <div style={{
+            backgroundColor: '#1e3a1e',
+            color: '#4ade80',
+            padding: '12px 20px',
             borderRadius: '8px',
-            cursor: 'pointer',
-            marginBottom: '20px',
+            border: '1px solid #2d7d32',
+            maxWidth: 'fit-content'
+          }}>
+            <span style={{ fontSize: '1.2rem' }}>✓</span> Vous êtes inscrit à ce cours
+          </div>
+        ) : (
+          <button
+            onClick={handleEnroll}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '500',
+              transition: 'all 0.2s',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
+          >
+            S'inscrire au cours
+          </button>
+        )}
+
+        <Link
+          to={`/courses/${id}/analysis`}
+          style={{
+            display: 'inline-block',
+            padding: '10px 20px',
+            backgroundColor: '#9b59b6',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '8px',
+            fontSize: '16px',
             fontWeight: '500',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
+            whiteSpace: 'nowrap'
           }}
-          onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
-          onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#8e44ad'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#9b59b6'}
         >
-          S'inscrire au cours
-        </button>
-      )}
+          Voir l'Analyse IA
+        </Link>
+      </div>
 
       {showReviewForm && (
         <form onSubmit={handleSubmitReview} style={{
@@ -493,6 +515,9 @@ function CourseDetails() {
           </div>
         )}
       </div>
+
+      {/* Section des cours similaires générés par IA */}
+      <SimilarCourses courseId={id} />
     </div>
   );
 }
